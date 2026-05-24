@@ -3,114 +3,1969 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>System - Quest Info</title>
+    <title>Stamp Duty & Registration Calculator | Maharashtra</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Calculate Stamp Duty, Registration Fees, and Document Handling Charges (DHC) for Leave and License / Rental agreements in Maharashtra under Section 36A of the Bombay Stamp Act, 1958." />
+    <meta name="keywords" content="stamp duty calculator, leave and license, rental agreement stamp duty, maharashtra stamp duty, registration fee calculator, mumbai rent agreement tax" />
+    
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-      body {
-        background-color: #0a0a0b;
-        color: #000000;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
+      /* Modern CSS Reset & Variable Tokens */
+      :root {
+        --bg-base: #06070a;
+        --bg-surface: #0e111a;
+        --bg-card: rgba(18, 22, 35, 0.65);
+        --bg-card-hover: rgba(24, 29, 46, 0.85);
+        --border-color: rgba(255, 255, 255, 0.06);
+        --border-focus: #6366f1;
+        
+        /* Neon/Fintech Colors */
+        --primary: #6366f1; /* Glowing Purple-Blue */
+        --primary-hover: #4f46e5;
+        --primary-glow: rgba(99, 102, 241, 0.15);
+        
+        --secondary: #00d4ff; /* Mana Cyan */
+        --secondary-glow: rgba(0, 212, 255, 0.15);
+        
+        --accent: #10b981; /* Emerald Success */
+        --accent-glow: rgba(16, 185, 129, 0.15);
+        
+        --warning: #f59e0b; /* Amber */
+        --danger: #ef4444;  /* Red */
+        
+        /* Text Colors */
+        --text-main: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --text-muted: #6b7280;
+        
+        --font-header: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        
+        --card-radius: 16px;
+        --input-radius: 10px;
+        --transition-speed: 0.3s;
+        --shadow-glow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(99, 102, 241, 0.05);
       }
 
-      /* The System Window Style */
-      .black { 
-        background: rgba(16, 22, 34, 0.95);
-        border: 2px solid #00d4ff;
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
-        padding: 30px; 
-        border-radius: 2px; /* Sharp edges for that UI feel */
-        width: 350px;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-base);
+        color: var(--text-main);
+        font-family: var(--font-body);
+        line-height: 1.6;
+        padding: 40px 20px;
+        min-height: 100vh;
+        background-image: 
+          radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 40%),
+          radial-gradient(circle at 90% 80%, rgba(0, 212, 255, 0.04) 0%, transparent 40%);
+        background-attachment: fixed;
+      }
+
+      /* Scrollbar Styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-base);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--primary);
+      }
+
+      /* Container Structure */
+      .app-wrapper {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      /* Header Styling */
+      header {
+        text-align: center;
+        margin-bottom: 10px;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      .logo-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+        border-radius: 50%;
+        margin-bottom: 12px;
+        box-shadow: 0 0 20px var(--primary-glow);
+        border: 1px solid rgba(99, 102, 241, 0.3);
+      }
+
+      h1 {
+        font-family: var(--font-header);
+        font-size: 2.2rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 70%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.5px;
+        margin-bottom: 6px;
+      }
+
+      .subtitle {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        font-weight: 400;
+        max-width: 600px;
+        margin: auto;
+      }
+
+      .subtitle span {
+        color: var(--secondary);
+        font-weight: 500;
+      }
+
+      /* Two Column Dashboard Grid */
+      .calculator-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 30px;
+        align-items: start;
+        animation: fadeInUp 0.8s ease-out;
+      }
+
+      /* Obsidian Glassmorphic Panels */
+      .panel {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--card-radius);
+        padding: 30px;
+        box-shadow: var(--shadow-glow);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+      }
+
+      .panel:hover {
+        border-color: rgba(99, 102, 241, 0.15);
+      }
+
+      .panel-title {
+        font-family: var(--font-header);
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 12px;
+      }
+
+      .panel-subtitle {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        margin-top: -20px;
+        margin-bottom: 25px;
+        display: block;
+      }
+
+      /* Inputs & Forms */
+      .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
         position: relative;
       }
 
-      h2 { color: #00d4ff; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #00d4ff; padding-bottom: 10px;}
-
-      label { display: block; margin-top: 15px; font-size: 0.8rem; color: #00d4ff; text-transform: uppercase; }
-
-      input, select {
-        background: transparent;
-        border: 1px solid #444;
-        color: #00d4ff ;
-        padding: 10px;
-        width: 100%;
-        margin-top: 5px;
-        box-sizing: border-box;
+      .form-group.full-width {
+        grid-column: span 2;
       }
 
-      button {
-        background: #00d4ff;
-        color: #000;
-        border: none;
-        padding: 12px;
-        width: 100%;
-        margin-top: 20px;
-        font-weight: bold;
-        cursor: pointer;
+      label {
+        font-family: var(--font-header);
+        font-size: 0.85rem;
+        font-weight: 600;
         text-transform: uppercase;
-        transition: 0.3s;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
-      button:hover { background: #fff; box-shadow: 0 0 15px #00d4ff; }
+      .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
 
-      /* Hidden Quest Results */
-      #quest-window {
-        margin-top: 20px;
-        padding: 15px;
-        border: 1px solid #ff4444;
-        background: rgba(255, 68, 68, 0.1);
+      .input-icon {
+        position: absolute;
+        left: 12px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        pointer-events: none;
+      }
+
+      input[type="number"],
+      input[type="text"] {
+        width: 100%;
+        background-color: rgba(5, 7, 12, 0.8);
+        border: 1px solid var(--border-color);
+        color: #fff;
+        padding: 12px 14px;
+        border-radius: var(--input-radius);
+        font-family: var(--font-body);
+        font-size: 0.95rem;
+        transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+      }
+
+      .input-wrapper input {
+        padding-left: 36px;
+      }
+
+      input[type="number"]:focus,
+      input[type="text"]:focus {
+        border-color: var(--border-focus);
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.25), inset 0 0 4px rgba(99, 102, 241, 0.1);
+        background-color: rgba(5, 7, 12, 0.95);
+      }
+
+      /* Premium Toggles / Segmented Controls */
+      .segmented-control {
+        display: flex;
+        background-color: rgba(5, 7, 12, 0.6);
+        border: 1px solid var(--border-color);
+        padding: 4px;
+        border-radius: var(--input-radius);
+        height: 48px;
+        align-items: center;
+        position: relative;
+      }
+
+      .segmented-control input[type="radio"] {
         display: none;
       }
 
-      .warning { color: #ff4444; font-weight: bold; }
+      .segmented-control label {
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 0;
+        cursor: pointer;
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border-radius: 8px;
+        z-index: 2;
+        transition: color var(--transition-speed);
+        text-transform: capitalize;
+        letter-spacing: 0;
+      }
+
+      .segmented-control input[type="radio"]:checked + label {
+        color: #fff;
+        background-color: var(--primary);
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+      }
+
+      /* Quick selection tags */
+      .preset-container {
+        display: flex;
+        gap: 8px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+
+      .preset-badge {
+        background-color: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: 500;
+      }
+
+      .preset-badge:hover {
+        background-color: rgba(99, 102, 241, 0.1);
+        border-color: var(--primary);
+        color: #fff;
+        transform: translateY(-1px);
+      }
+
+      /* Varying Rent Escalation Card */
+      .config-card {
+        background: rgba(5, 7, 12, 0.4);
+        border: 1px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      /* Varying Rent Dynamic Table */
+      .table-container {
+        margin-top: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: rgba(5, 7, 12, 0.4);
+      }
+
+      .varying-rent-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 0.9rem;
+      }
+
+      .varying-rent-table th {
+        background-color: rgba(255, 255, 255, 0.02);
+        color: var(--text-secondary);
+        font-weight: 600;
+        padding: 12px 16px;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .varying-rent-table td {
+        padding: 10px 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+
+      .varying-rent-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .varying-rent-table input[readonly] {
+        background-color: rgba(255, 255, 255, 0.02);
+        color: var(--text-muted);
+        border: none;
+        cursor: not-allowed;
+      }
+
+      .varying-rent-table input[type="number"] {
+        padding: 6px 10px;
+        background-color: rgba(0, 0, 0, 0.3);
+      }
+
+      /* Info badges */
+      .info-box {
+        display: flex;
+        gap: 10px;
+        background: rgba(99, 102, 241, 0.05);
+        border: 1px solid rgba(99, 102, 241, 0.15);
+        border-radius: 10px;
+        padding: 12px 16px;
+        font-size: 0.8rem;
+        color: #c7d2fe;
+        align-items: flex-start;
+      }
+
+      .info-box svg {
+        flex-shrink: 0;
+        margin-top: 2px;
+        color: var(--primary);
+      }
+
+      /* Right Column: Sticky Invoice & Results */
+      .results-sidebar {
+        position: sticky;
+        top: 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      /* Interactive Live Receipt Panel */
+      .receipt-panel {
+        background: linear-gradient(135deg, rgba(20, 24, 39, 0.9) 0%, rgba(11, 13, 23, 0.95) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--card-radius);
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .receipt-panel::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(to right, var(--primary), var(--secondary), var(--accent));
+      }
+
+      .receipt-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        padding-bottom: 15px;
+      }
+
+      .receipt-header h3 {
+        font-family: var(--font-header);
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+      }
+
+      .live-indicator {
+        background-color: rgba(16, 185, 129, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        padding: 3px 8px;
+        border-radius: 30px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .live-indicator-dot {
+        width: 6px;
+        height: 6px;
+        background-color: var(--accent);
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+      }
+
+      /* Receipt Bill Items */
+      .bill-items {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 25px;
+      }
+
+      .bill-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-size: 0.9rem;
+      }
+
+      .bill-item-label {
+        color: var(--text-secondary);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bill-item-sub {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .bill-item-val {
+        font-family: var(--font-header);
+        font-weight: 600;
+        color: #fff;
+      }
+
+      .bill-item.highlighted {
+        background-color: rgba(255, 255, 255, 0.02);
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .bill-item.highlighted .bill-item-label {
+        color: #fff;
+        font-weight: 500;
+      }
+
+      .bill-item.highlighted .bill-item-val {
+        color: var(--secondary);
+      }
+
+      .bill-divider {
+        height: 1px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        margin: 5px 0;
+      }
+
+      /* Fees section */
+      .fees-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        margin-bottom: 25px;
+      }
+
+      .fee-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+      }
+
+      .fee-item-label {
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .fee-item-val {
+        font-family: var(--font-header);
+        font-weight: 600;
+      }
+
+      .fee-item.primary-fee .fee-item-val {
+        font-size: 1.15rem;
+        color: var(--primary);
+        text-shadow: 0 0 10px var(--primary-glow);
+      }
+
+      .fee-item.primary-fee .fee-item-label {
+        font-weight: 600;
+        color: #fff;
+      }
+
+      /* Total Payable Display Box */
+      .total-payable-card {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.15) 100%);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        padding: 20px;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.05);
+        transition: transform 0.2s;
+      }
+
+      .total-payable-card:hover {
+        transform: scale(1.02);
+      }
+
+      .total-payable-label {
+        font-family: var(--font-header);
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .total-payable-val {
+        font-family: var(--font-header);
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: #fff;
+        text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+      }
+
+      /* Button group */
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .btn {
+        width: 100%;
+        padding: 14px 20px;
+        border-radius: var(--input-radius);
+        font-family: var(--font-header);
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all var(--transition-speed) cubic-bezier(0.4, 0, 0.2, 1);
+        border: none;
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-hover);
+        box-shadow: 0 6px 24px rgba(99, 102, 241, 0.45);
+        transform: translateY(-1px);
+      }
+
+      .btn-secondary {
+        background-color: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+      }
+
+      .btn-secondary:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        transform: translateY(-1px);
+      }
+
+      /* SVG Dynamic Donut Chart */
+      .chart-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .donut-wrapper {
+        position: relative;
+        width: 160px;
+        height: 160px;
+      }
+
+      .donut-chart {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+      }
+
+      .donut-chart circle {
+        transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+      }
+
+      .donut-center {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+
+      .donut-title {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
+        font-weight: 600;
+      }
+
+      .donut-val {
+        font-family: var(--font-header);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #fff;
+        margin-top: 2px;
+      }
+
+      .chart-legend {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+      }
+
+      .legend-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-secondary);
+      }
+
+      .legend-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      .legend-dot.rent { background-color: var(--primary); }
+      .legend-dot.nonrefund { background-color: var(--secondary); }
+      .legend-dot.interest { background-color: var(--warning); }
+
+      .legend-val {
+        font-weight: 600;
+        color: #fff;
+      }
+
+      /* Legal accordion section */
+      .faq-panel {
+        grid-column: span 2;
+        margin-top: 10px;
+      }
+
+      .faq-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .accordion-item {
+        background-color: rgba(5, 7, 12, 0.4);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s;
+      }
+
+      .accordion-item:hover {
+        border-color: rgba(99, 102, 241, 0.15);
+      }
+
+      .accordion-header {
+        padding: 18px 20px;
+        font-family: var(--font-header);
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        color: #fff;
+        gap: 15px;
+      }
+
+      .accordion-icon {
+        color: var(--text-muted);
+        transition: transform var(--transition-speed);
+        flex-shrink: 0;
+      }
+
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height var(--transition-speed) ease-out, padding var(--transition-speed) ease-out;
+        padding: 0 20px;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        border-top: 1px solid transparent;
+      }
+
+      .accordion-item.active {
+        border-color: rgba(99, 102, 241, 0.2);
+        background-color: rgba(5, 7, 12, 0.6);
+        box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.05);
+      }
+
+      .accordion-item.active .accordion-header {
+        color: var(--secondary);
+      }
+
+      .accordion-item.active .accordion-icon {
+        transform: rotate(45deg);
+        color: var(--secondary);
+      }
+
+      .accordion-item.active .accordion-content {
+        padding: 15px 20px 20px 20px;
+        border-color: var(--border-color);
+      }
+
+      /* Copy feedback Toast notifications */
+      .toast {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: var(--bg-surface);
+        border: 1px solid var(--accent);
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-family: var(--font-header);
+        font-weight: 500;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 10px rgba(16, 185, 129, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 1000;
+      }
+
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+
+      .toast svg {
+        color: var(--accent);
+      }
+
+      /* Pulse and Float Animations */
+      @keyframes pulse {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        50% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.5; }
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Dynamic calculation update highlight effect */
+      @keyframes valueChangeGlow {
+        0% { color: #fff; text-shadow: none; }
+        50% { color: var(--secondary); text-shadow: 0 0 8px var(--secondary); }
+        100% { color: #fff; text-shadow: none; }
+      }
+
+      .glow-update {
+        animation: valueChangeGlow 0.5s ease-out;
+      }
+
+      /* Responsive Layout Adjustments */
+      @media (max-width: 1023px) {
+        .calculator-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .results-sidebar {
+          position: static;
+        }
+
+        .faq-panel {
+          grid-column: span 1;
+        }
+
+        .faq-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 600px) {
+        body {
+          padding: 20px 10px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .panel {
+          padding: 20px;
+        }
+
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+
+        .form-group.full-width {
+          grid-column: span 1;
+        }
+      }
+
+      /* Print Stylesheet Layout - White clean invoice */
+      @media print {
+        body {
+          background: #fff !important;
+          color: #000 !important;
+          padding: 0 !important;
+        }
+        
+        .app-wrapper {
+          max-width: 100% !important;
+          gap: 15px !important;
+        }
+
+        .panel, .receipt-panel {
+          background: #fff !important;
+          border: 1px solid #ddd !important;
+          box-shadow: none !important;
+          color: #000 !important;
+          padding: 15px !important;
+          backdrop-filter: none !important;
+          border-radius: 0 !important;
+        }
+
+        .logo-icon,
+        .preset-container,
+        .action-buttons,
+        .faq-panel,
+        .chart-panel,
+        header .subtitle,
+        .segmented-control input,
+        .segmented-control label,
+        .config-card,
+        .table-container {
+          display: none !important;
+        }
+
+        /* Show the essential inputs as simple text for reference */
+        input, select {
+          border: none !important;
+          background: transparent !important;
+          color: #000 !important;
+          padding: 0 !important;
+          font-weight: bold !important;
+          pointer-events: none !important;
+        }
+
+        .calculator-grid {
+          grid-template-columns: 1fr !important;
+        }
+
+        .receipt-panel::before {
+          display: none !important;
+        }
+
+        .receipt-header .live-indicator {
+          display: none !important;
+        }
+
+        .bill-item-label, .fee-item-label {
+          color: #333 !important;
+        }
+
+        .bill-item-val, .fee-item-val {
+          color: #000 !important;
+        }
+
+        .total-payable-card {
+          background: #f3f4f6 !important;
+          border: 2px solid #000 !important;
+          color: #000 !important;
+        }
+
+        .total-payable-label {
+          color: #000 !important;
+        }
+
+        .total-payable-val {
+          color: #000 !important;
+          text-shadow: none !important;
+        }
+      }
     </style>
   </head>
   <body>
-
-    <div class="black">
-      <h2>[ DAILY QUEST ]</h2>
+    <div class="app-wrapper">
       
-      <label>Hunter Name</label>
-      <input type="text" id="UserName" placeholder="Sung Jin-Woo" />
-      
-      <label>Awakened Age</label>
-      <input type="number" id="Age" placeholder="24" />
-      
-      <label>Current Rank (Fitness Level)</label>
-      <select id="level">
-        <option value="E-Rank">E-Rank (Beginner)</option>
-        <option value="C-Rank">C-Rank (Intermediate)</option>
-        <option value="S-Rank">S-Rank (Advanced)</option>
-      </select>
+      <!-- Calculator Header -->
+      <header>
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v8"/>
+            <path d="M8 12h8"/>
+          </svg>
+        </div>
+        <h1>Stamp Duty & Registration Calculator</h1>
+        <p class="subtitle">Maharashtra Leave and License Agreements <span>(Bombay Stamp Act, 1958 Article 36A)</span></p>
+      </header>
 
-      <button onclick="startQuest()">Check Quest Requirements</button>
+      <!-- Main Columns Grid -->
+      <div class="calculator-grid">
+        
+        <!-- Left Side: Interactive Input Panel -->
+        <div class="panel">
+          <div class="panel-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            Agreement Parameters
+          </div>
+          
+          <div class="form-section">
+            
+            <!-- Row 1: Duration and Location -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="txtPeriod">
+                  License Period
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" stroke-width="2" style="cursor:help;">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+                  </svg>
+                </label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                  <input
+                    type="number"
+                    id="txtPeriod"
+                    placeholder="e.g., 24"
+                    min="1"
+                    value="24"
+                    oninput="handlePeriodChange()"
+                  />
+                </div>
+                <div class="preset-container">
+                  <span class="preset-badge" onclick="setPresetPeriod(11)">11 Months</span>
+                  <span class="preset-badge" onclick="setPresetPeriod(22)">22 Months</span>
+                  <span class="preset-badge" onclick="setPresetPeriod(24)">24 Months</span>
+                  <span class="preset-badge" onclick="setPresetPeriod(36)">36 Months</span>
+                  <span class="preset-badge" onclick="setPresetPeriod(60)">60 Months</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label>Property Location</label>
+                <div class="segmented-control">
+                  <input
+                    type="radio"
+                    name="area"
+                    id="Urban"
+                    value="Urban"
+                    checked
+                    onchange="calculateStampDuty()"
+                  />
+                  <label for="Urban">Urban Area</label>
+                  <input
+                    type="radio"
+                    name="area"
+                    id="Rural"
+                    value="Rural"
+                    onchange="calculateStampDuty()"
+                  />
+                  <label for="Rural">Rural Area</label>
+                </div>
+                <span class="preset-container" style="color:var(--text-muted); font-size:0.75rem; padding-left:4px; margin-top:12px;">
+                  Affects the fixed registration fee (Urban: ₹1000, Rural: ₹500).
+                </span>
+              </div>
+            </div>
+            
+            <!-- Row 2: Deposits -->
+            <div class="form-row">
+              <div class="form-group">
+                <label for="refundDeposit">Refundable Deposit</label>
+                <div class="input-wrapper">
+                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                  <input
+                    type="number"
+                    id="refundDeposit"
+                    placeholder="0"
+                    min="0"
+                    oninput="calculateStampDuty()"
+                  />
+                </div>
+                <div class="preset-container">
+                  <span class="preset-badge" onclick="setPresetDeposit('refund', 50000)">50K</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('refund', 100000)">1L</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('refund', 200000)">2L</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('refund', 500000)">5L</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="nonRefundDeposit">Non-Refundable Deposit</label>
+                <div class="input-wrapper">
+                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                  <input
+                    type="number"
+                    id="nonRefundDeposit"
+                    placeholder="0"
+                    min="0"
+                    oninput="calculateStampDuty()"
+                  />
+                </div>
+                <div class="preset-container">
+                  <span class="preset-badge" onclick="setPresetDeposit('nonrefund', 0)">₹0</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('nonrefund', 10000)">10K</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('nonrefund', 25000)">25K</span>
+                  <span class="preset-badge" onclick="setPresetDeposit('nonrefund', 50000)">50K</span>
+                </div>
+              </div>
+            </div>
 
-      <div id="quest-window">
-        <p class="warning">! WARNING !</p>
-        <p id="quest-desc"></p>
-        <p style="font-size: 0.7rem; color: #201d1d;">*Failure to complete may result in a penalty.*</p>
+            <!-- Informative warning badge for Deposits -->
+            <div class="info-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
+              </svg>
+              <span><strong>Notional Interest Rule:</strong> Refundable deposits are taxed at a 10% per annum compounding index rate ($10\%$ of deposit multiplied by total period in years) which is added directly to the total consideration.</span>
+            </div>
+            
+            <!-- Row 3: Rent Setup Toggle -->
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label>Rental Escalation Strategy</label>
+                <div class="segmented-control" style="max-width:350px;">
+                  <input
+                    type="radio"
+                    name="renttype"
+                    id="Fixed"
+                    value="Fixed"
+                    checked
+                    onchange="toggleRentType()"
+                  />
+                  <label for="Fixed">Fixed Monthly Rent</label>
+                  <input
+                    type="radio"
+                    name="renttype"
+                    id="Varying"
+                    value="Varying"
+                    onchange="toggleRentType()"
+                  />
+                  <label for="Varying">Varying Rent Schedule</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 3.1: Fixed Rent Input (Shown by default) -->
+            <div class="form-group" id="fixedRentContainer">
+              <label for="avgMonthRate">Average Monthly Rent</label>
+              <div class="input-wrapper">
+                <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                <input
+                  type="number"
+                  id="avgMonthRate"
+                  placeholder="0"
+                  min="0"
+                  value="15000"
+                  oninput="calculateStampDuty()"
+                />
+              </div>
+              <div class="preset-container">
+                <span class="preset-badge" onclick="setPresetRent(10000)">10K / mo</span>
+                <span class="preset-badge" onclick="setPresetRent(15000)">15K / mo</span>
+                <span class="preset-badge" onclick="setPresetRent(25000)">25K / mo</span>
+                <span class="preset-badge" onclick="setPresetRent(50000)">50K / mo</span>
+                <span class="preset-badge" onclick="setPresetRent(100000)">1L / mo</span>
+              </div>
+            </div>
+
+            <!-- Section 3.2: Varying Rent Configurator (Hidden by default) -->
+            <div class="form-section" id="varyingRentConfig" style="display: none;">
+              <div class="config-card">
+                <span style="font-size:0.85rem; font-weight:600; color:#fff; display:block;">Automated Escalation Configurator</span>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="baseRent">Base Year 1 Monthly Rent</label>
+                    <div class="input-wrapper">
+                      <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                      <input
+                        type="number"
+                        id="baseRent"
+                        placeholder="e.g., 10000"
+                        min="0"
+                        value="10000"
+                        oninput="generateVaryingRentTable()"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label>Increment Value & Type</label>
+                    <div style="display:flex; gap:10px;">
+                      <div class="input-wrapper" style="flex:1;">
+                        <input
+                          type="number"
+                          id="incrementValue"
+                          placeholder="e.g., 5"
+                          min="0"
+                          value="5"
+                          oninput="generateVaryingRentTable()"
+                        />
+                      </div>
+                      <div class="segmented-control" style="width:100px; height:46px;">
+                        <input
+                          type="radio"
+                          name="incType"
+                          id="incPercentage"
+                          value="Percentage"
+                          checked
+                          onchange="generateVaryingRentTable()"
+                        />
+                        <label for="incPercentage">%</label>
+                        <input
+                          type="radio"
+                          name="incType"
+                          id="incRupees"
+                          value="Rupees"
+                          onchange="generateVaryingRentTable()"
+                        />
+                        <label for="incRupees">₹</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Editable Escalation Table -->
+              <div class="form-group">
+                <label>Varying Rent Schedule (12-Month Intervals)</label>
+                <div class="table-container">
+                  <table class="varying-rent-table" id="varyingRentTable">
+                    <thead>
+                      <tr>
+                        <th style="width: 25%;">From Month</th>
+                        <th style="width: 25%;">To Month</th>
+                        <th style="width: 50%;">Rent Per Month (₹)</th>
+                      </tr>
+                    </thead>
+                    <tbody id="monthtable"></tbody>
+                  </table>
+                </div>
+                <span class="preset-container" style="color:var(--text-muted); font-size:0.75rem; padding-left:4px; margin-top:8px;">
+                  Note: The rent values in the right-hand column can be manually overwritten to fit custom escalation rules!
+                </span>
+              </div>
+            </div>
+
+            <!-- Section 4: Additional Charges -->
+            <div class="form-row" style="margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 20px;">
+              <div class="form-group">
+                <label for="legalCharges">Legal Drafting Charges</label>
+                <div class="input-wrapper">
+                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                  <input
+                    type="number"
+                    id="legalCharges"
+                    placeholder="0"
+                    min="0"
+                    oninput="calculateStampDuty()"
+                  />
+                </div>
+                <div class="preset-container">
+                  <span class="preset-badge" onclick="setPresetCharge('legal', 0)">₹0</span>
+                  <span class="preset-badge" onclick="setPresetCharge('legal', 1000)">1,000</span>
+                  <span class="preset-badge" onclick="setPresetCharge('legal', 2000)">2,000</span>
+                  <span class="preset-badge" onclick="setPresetCharge('legal', 3000)">3,000</span>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="visitingCharges">Visiting & Biometric Charges</label>
+                <div class="input-wrapper">
+                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
+                  <input
+                    type="number"
+                    id="visitingCharges"
+                    placeholder="0"
+                    min="0"
+                    oninput="calculateStampDuty()"
+                  />
+                </div>
+                <div class="preset-container">
+                  <span class="preset-badge" onclick="setPresetCharge('visiting', 0)">₹0</span>
+                  <span class="preset-badge" onclick="setPresetCharge('visiting', 500)">500</span>
+                  <span class="preset-badge" onclick="setPresetCharge('visiting', 1000)">1,000</span>
+                  <span class="preset-badge" onclick="setPresetCharge('visiting', 1500)">1,500</span>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <!-- Right Side: Sticky Live Receipt and Visual Breakdown -->
+        <div class="results-sidebar">
+          
+          <!-- Sticky Bill Card -->
+          <div class="receipt-panel">
+            <div class="receipt-header">
+              <h3>Live Agreement Receipt</h3>
+              <div class="live-indicator">
+                <span class="live-indicator-dot"></span>
+                LIVE UPDATING
+              </div>
+            </div>
+
+            <!-- Taxable Base Items -->
+            <div class="bill-items">
+              <div class="bill-item">
+                <div class="bill-item-label">
+                  Total Rent Consideration
+                  <span class="bill-item-sub" id="rentCalculationLabel">₹15,000 × 24 months</span>
+                </div>
+                <div class="bill-item-val" id="valTotalRent">₹3,60,000</div>
+              </div>
+
+              <div class="bill-item">
+                <div class="bill-item-label">
+                  Non-Refundable Deposit
+                  <span class="bill-item-sub">One-time premium</span>
+                </div>
+                <div class="bill-item-val" id="valNonRefund">₹0</div>
+              </div>
+
+              <div class="bill-item">
+                <div class="bill-item-label">
+                  Notional Interest on Deposit
+                  <span class="bill-item-sub" id="interestCalculationLabel">10% p.a. on ₹0</span>
+                </div>
+                <div class="bill-item-val" id="valNotionalInterest">₹0</div>
+              </div>
+
+              <div class="bill-divider"></div>
+
+              <div class="bill-item highlighted">
+                <div class="bill-item-label">
+                  Taxable Base (Consideration)
+                  <span class="bill-item-sub">Sum of taxable values</span>
+                </div>
+                <div class="bill-item-val" id="valTotalConsideration">₹3,60,000</div>
+              </div>
+            </div>
+
+            <!-- State Taxes and Fees -->
+            <div class="fees-list">
+              <div class="fee-item primary-fee">
+                <div class="fee-item-label">
+                  Stamp Duty (0.25%)
+                  <span class="bill-item-sub" style="font-weight:normal; margin-top:2px;">Bombay Stamp Act Art. 36A</span>
+                </div>
+                <div class="fee-item-val" id="stmpduty">₹900/-</div>
+              </div>
+
+              <div class="bill-divider" style="opacity:0.3;"></div>
+
+              <div class="fee-item">
+                <div class="fee-item-label">
+                  Registration Fees
+                  <span class="bill-item-sub" id="regFeeLocationLabel" style="font-weight:normal;">Fixed for Urban area</span>
+                </div>
+                <div class="fee-item-val" id="regfee">₹1,000/-</div>
+              </div>
+
+              <div class="fee-item">
+                <div class="fee-item-label">
+                  Document Handling Charges
+                  <span class="bill-item-sub" style="font-weight:normal;">Standard scanning & archival</span>
+                </div>
+                <div class="fee-item-val" id="dhc">₹300/-</div>
+              </div>
+
+              <div class="fee-item">
+                <div class="fee-item-label">
+                  Legal Charges
+                  <span class="bill-item-sub" style="font-weight:normal;">Drafting & professional fee</span>
+                </div>
+                <div class="fee-item-val" id="legalfee">₹0/-</div>
+              </div>
+
+              <div class="fee-item">
+                <div class="fee-item-label">
+                  Visiting Charges
+                  <span class="bill-item-sub" style="font-weight:normal;">On-site biometrics & support</span>
+                </div>
+                <div class="fee-item-val" id="visitingfee">₹0/-</div>
+              </div>
+            </div>
+
+            <!-- Grand Total -->
+            <div class="total-payable-card">
+              <span class="total-payable-label">Total Payable Estimate</span>
+              <span class="total-payable-val" id="valGrandTotal">₹2,200/-</span>
+            </div>
+
+            <!-- Actions buttons inside invoice -->
+            <div class="action-buttons">
+              <button class="btn btn-primary" onclick="triggerVisualPulse(); window.print();">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 6 2 18 2 18 9"/>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                  <rect x="6" y="14" width="12" height="8"/>
+                </svg>
+                Print / Save Detailed PDF
+              </button>
+              
+              <button class="btn btn-secondary" onclick="copyReceiptToClipboard()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                </svg>
+                Copy Text Summary
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Analytics Chart -->
+          <div class="panel chart-panel">
+            <span style="font-size:0.95rem; font-weight:700; color:#fff; align-self:flex-start;">Financial Share Analysis</span>
+            
+            <div class="donut-wrapper">
+              <svg class="donut-chart" viewBox="0 0 100 100">
+                <!-- Outer Base Circle -->
+                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="9"/>
+                
+                <!-- dynamic donut segments -->
+                <circle id="segRent" cx="50" cy="50" r="40" fill="none" stroke="var(--primary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                <circle id="segNonRefund" cx="50" cy="50" r="40" fill="none" stroke="var(--secondary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                <circle id="segInterest" cx="50" cy="50" r="40" fill="none" stroke="var(--warning)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+              </svg>
+              
+              <div class="donut-center">
+                <span class="donut-title">Taxable Base</span>
+                <span class="donut-val" id="chartTotalVal">₹3.6L</span>
+              </div>
+            </div>
+
+            <!-- Custom Chart Legend -->
+            <div class="chart-legend">
+              <div class="legend-item">
+                <span class="legend-label">
+                  <span class="legend-dot rent"></span>
+                  Total Rent Paid
+                </span>
+                <span class="legend-val" id="legendRentPct">100%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-label">
+                  <span class="legend-dot nonrefund"></span>
+                  Non-Refundable Deposit
+                </span>
+                <span class="legend-val" id="legendNonRefundPct">0%</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-label">
+                  <span class="legend-dot interest"></span>
+                  Notional Interest
+                </span>
+                <span class="legend-val" id="legendInterestPct">0%</span>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- FAQ and Legal Explanation Accordions -->
+        <div class="panel faq-panel">
+          <div class="panel-title" style="margin-bottom:15px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            Calculation Rules & Legal Framework
+          </div>
+          <span class="panel-subtitle">Everything you need to know about Leave and License agreement stamp duty in Maharashtra.</span>
+          
+          <div class="faq-grid">
+            <div class="faq-column">
+              
+              <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                  How is Stamp Duty calculated?
+                  <svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </div>
+                <div class="accordion-content">
+                  Under Article 36A of the Bombay Stamp Act, 1958, Stamp Duty is calculated at a flat rate of <strong>0.25%</strong> of the "Total Consideration" (the Taxable Base). The Total Consideration includes the sum of all rent to be paid for the license period, any non-refundable deposits, and a 10% per annum notional interest on the refundable security deposit.
+                </div>
+              </div>
+              
+              <div class="accordion-item" style="margin-top:15px;">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                  What is Notional Interest?
+                  <svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </div>
+                <div class="accordion-content">
+                  The state government assumes that if a landlord receives a refundable security deposit, they will earn interest on it. Therefore, a **notional interest rate of 10% per annum** is calculated on the refundable security deposit for the duration of the license period. This calculated interest is added to the total rent and non-refundable deposits to form the "Total Consideration".
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="faq-column">
+              
+              <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                  What are the Registration Fees?
+                  <svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </div>
+                <div class="accordion-content">
+                  Registration charges are fixed by the government based on where the property is located:
+                  <ul style="margin-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
+                    <li><strong>Urban Areas:</strong> Property within Municipal Corporation boundaries carries a fixed registration fee of <strong>₹1,000</strong>.</li>
+                    <li><strong>Rural Areas:</strong> Property outside Municipal Corporation boundaries carries a fixed registration fee of <strong>₹500</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="accordion-item" style="margin-top:15px;">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                  Is there a minimum Stamp Duty?
+                  <svg class="accordion-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                  </svg>
+                </div>
+                <div class="accordion-content">
+                  Yes. If the calculated stamp duty is less than ₹100, the law mandates a **minimum stamp duty of ₹100** (provided the total consideration is greater than 0). If there is no deposit, no rent, and no consideration, the stamp duty is ₹0.
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <script>
-      function startQuest() {
-        const name = document.getElementById('UserName').value || "Unknown Hunter";
-        const rank = document.getElementById('level').value;
-        const questWindow = document.getElementById('quest-window');
-        const questDesc = document.getElementById('quest-desc');
+    <!-- Clipboard copy feedback toast -->
+    <div class="toast" id="clipboardToast">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <span>Detailed breakdown copied to clipboard!</span>
+    </div>
 
-        const quests = {
-          "E-Rank": "100 Push-ups, 100 Sit-ups, 100 Squats, and 10km Running. Prepare to level up.",
-          "C-Rank": "200 Push-ups, 200 Sit-ups, 20km Running, and Shadow Training (Shadow Boxing).",
-          "S-Rank": "Daily Dungeon Clear: 500 Reps of each exercise and a 40km Marathon. Transcend your limits."
+    <script>
+      // Active Element Highlight tracker for dynamic glow animations
+      let previousValues = {
+        rent: 0,
+        nonRefund: 0,
+        notional: 0,
+        totalBase: 0,
+        duty: 0,
+        payable: 0,
+        legal: 0,
+        visiting: 0
+      };
+
+      // Handle changes to the license period
+      function handlePeriodChange() {
+        const isFixed = document.getElementById("Fixed").checked;
+        if (!isFixed) {
+          generateVaryingRentTable(); // Rebuild varying rent rows
+        }
+        calculateStampDuty();
+      }
+
+      // Quick Input Presets Helpers
+      function setPresetPeriod(months) {
+        document.getElementById("txtPeriod").value = months;
+        handlePeriodChange();
+      }
+
+      function setPresetDeposit(type, val) {
+        if (type === 'refund') {
+          document.getElementById("refundDeposit").value = val || "";
+        } else {
+          document.getElementById("nonRefundDeposit").value = val || "";
+        }
+        calculateStampDuty();
+      }
+
+      function setPresetRent(rent) {
+        document.getElementById("avgMonthRate").value = rent;
+        calculateStampDuty();
+      }
+
+      function setPresetCharge(type, val) {
+        if (type === 'legal') {
+          document.getElementById("legalCharges").value = val || "";
+        } else {
+          document.getElementById("visitingCharges").value = val || "";
+        }
+        calculateStampDuty();
+      }
+
+      // Accordion dropdown toggle function
+      function toggleAccordion(element) {
+        const parent = element.parentElement;
+        const isActive = parent.classList.contains("active");
+        
+        // Close all first for clean single-accordion look
+        document.querySelectorAll(".accordion-item").forEach(item => {
+          item.classList.remove("active");
+          item.querySelector(".accordion-content").style.maxHeight = null;
+        });
+
+        if (!isActive) {
+          parent.classList.add("active");
+          const content = parent.querySelector(".accordion-content");
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      }
+
+      // Toggle UI elements between Fixed and Varying Rent
+      function toggleRentType() {
+        const isFixed = document.getElementById("Fixed").checked;
+
+        document.getElementById("fixedRentContainer").style.display = isFixed
+          ? "block"
+          : "none";
+        document.getElementById("varyingRentConfig").style.display = isFixed
+          ? "none"
+          : "block";
+
+        if (!isFixed) {
+          generateVaryingRentTable();
+        }
+        calculateStampDuty();
+      }
+
+      // Generate the varying rent table dynamically and escalate automatically
+      function generateVaryingRentTable() {
+        const months = parseInt(document.getElementById("txtPeriod").value) || 0;
+        const baseRent = parseFloat(document.getElementById("baseRent").value) || 0;
+        const incType = document.querySelector('input[name="incType"]:checked').value;
+        const incValue = parseFloat(document.getElementById("incrementValue").value) || 0;
+
+        const tbody = document.getElementById("monthtable");
+        tbody.innerHTML = ""; // Clear old rows
+
+        if (months <= 0) return;
+
+        let currentMonth = 1;
+        let rowCounter = 1;
+        let currentRent = baseRent;
+
+        while (currentMonth <= months) {
+          // Default block is 12 months, or whatever remains
+          let endMonth = currentMonth + 11;
+          if (endMonth > months) {
+            endMonth = months;
+          }
+
+          // Calculate escalated rent for rows after the first one
+          if (rowCounter > 1) {
+            if (incType === "Percentage") {
+              currentRent = currentRent + (currentRent * (incValue / 100));
+            } else if (incType === "Rupees") {
+              currentRent = currentRent + incValue;
+            }
+          }
+
+          // Create HTML row
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td style="font-weight: 500; color: var(--text-secondary);">
+              Month ${currentMonth}
+              <input type="hidden" id="fmdate${rowCounter}" value="${currentMonth}">
+            </td>
+            <td style="font-weight: 500; color: var(--text-secondary);">
+              Month ${endMonth}
+              <input type="hidden" id="tmdate${rowCounter}" value="${endMonth}">
+            </td>
+            <td>
+              <div class="input-wrapper">
+                <span class="input-icon" style="font-size:0.75rem; color:var(--text-muted);">₹</span>
+                <input 
+                  type="number" 
+                  id="rent${rowCounter}" 
+                  class="dyn-rent" 
+                  value="${Math.round(currentRent)}" 
+                  oninput="calculateStampDuty()" 
+                  style="width: 100%;"
+                >
+              </div>
+            </td>
+          `;
+
+          tbody.appendChild(tr);
+
+          currentMonth = endMonth + 1;
+          rowCounter++;
+        }
+
+        // Trigger calculations
+        calculateStampDuty();
+      }
+
+      // Dynamic currency formatter
+      function formatINR(number) {
+        if (isNaN(number) || number === null) return "₹0";
+        return "₹" + Math.round(number).toLocaleString('en-IN');
+      }
+
+      // Trigger a beautiful visual highlight flash on elements that change values
+      function flashOnUpdate(elementId, currentValue, previousValue) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        
+        if (currentValue !== previousValue) {
+          el.classList.remove("glow-update");
+          // trigger reflow to reset animation
+          void el.offsetWidth;
+          el.classList.add("glow-update");
+        }
+      }
+
+      // Core Calculation Logic
+      function calculateStampDuty() {
+        const months = parseFloat(document.getElementById("txtPeriod").value) || 0;
+        const refundDeposit = parseFloat(document.getElementById("refundDeposit").value) || 0;
+        const nonRefundDeposit = parseFloat(document.getElementById("nonRefundDeposit").value) || 0;
+
+        let totalRent = 0;
+        const rentType = document.querySelector('input[name="renttype"]:checked').value;
+
+        if (rentType === "Fixed") {
+          const avgMonthRate = parseFloat(document.getElementById("avgMonthRate").value) || 0;
+          totalRent = avgMonthRate * months;
+          
+          document.getElementById("rentCalculationLabel").innerText = `${formatINR(avgMonthRate)} × ${months} months`;
+        } else {
+          // Look at the generated table rows and sum them up
+          const tbody = document.getElementById("monthtable");
+          const rows = tbody.getElementsByTagName("tr");
+          let calculationLabelParts = [];
+
+          for (let i = 0; i < rows.length; i++) {
+            let fmInput = rows[i].querySelector('input[id^="fmdate"]');
+            let tmInput = rows[i].querySelector('input[id^="tmdate"]');
+            let rentInput = rows[i].querySelector('input[id^="rent"]');
+
+            if (fmInput && tmInput && rentInput && rentInput.value) {
+              let fromMonth = parseFloat(fmInput.value) || 0;
+              let toMonth = parseFloat(tmInput.value) || 0;
+              let periodLength = toMonth - fromMonth + 1;
+              let rentValue = parseFloat(rentInput.value) || 0;
+
+              totalRent += rentValue * periodLength;
+              
+              if (i < 3) { // Show up to first 3 schedule lines in description
+                calculationLabelParts.push(`₹${Math.round(rentValue)} (M${fromMonth}-${toMonth})`);
+              }
+            }
+          }
+          if (rows.length > 3) {
+            calculationLabelParts.push('...');
+          }
+          document.getElementById("rentCalculationLabel").innerText = "Schedule: " + calculationLabelParts.join(' + ');
+        }
+
+        // Calculate Taxable Base (Bombay Stamp Act Article 36A Rules)
+        const notionalInterest = refundDeposit * 0.1 * (months / 12);
+        const totalConsideration = totalRent + nonRefundDeposit + notionalInterest;
+
+        // Calculate Stamp Duty (0.25% of Total Consideration, rounded to nearest rupee)
+        let stampDuty = Math.round(totalConsideration * 0.0025);
+        if (stampDuty < 100 && totalConsideration > 0) stampDuty = 100;
+        if (totalConsideration === 0) stampDuty = 0;
+
+        // Additional service fees
+        const legalCharges = parseFloat(document.getElementById("legalCharges").value) || 0;
+        const visitingCharges = parseFloat(document.getElementById("visitingCharges").value) || 0;
+
+        // Fees
+        const area = document.querySelector('input[name="area"]:checked').value;
+        const regFee = area === "Urban" ? 1000 : 500;
+        const dhc = 300;
+        const grandTotal = stampDuty + regFee + dhc + legalCharges + visitingCharges;
+
+        // Update Labels
+        document.getElementById("interestCalculationLabel").innerText = `10% interest p.a. for ${months} months`;
+        document.getElementById("regFeeLocationLabel").innerText = `Fixed rate for ${area} area`;
+
+        // Apply animated flashes on value updates
+        flashOnUpdate("valTotalRent", totalRent, previousValues.rent);
+        flashOnUpdate("valNonRefund", nonRefundDeposit, previousValues.nonRefund);
+        flashOnUpdate("valNotionalInterest", notionalInterest, previousValues.notional);
+        flashOnUpdate("valTotalConsideration", totalConsideration, previousValues.totalBase);
+        flashOnUpdate("stmpduty", stampDuty, previousValues.duty);
+        flashOnUpdate("legalfee", legalCharges, previousValues.legal);
+        flashOnUpdate("visitingfee", visitingCharges, previousValues.visiting);
+        flashOnUpdate("valGrandTotal", grandTotal, previousValues.payable);
+
+        // Update Values in DOM
+        document.getElementById("valTotalRent").innerText = formatINR(totalRent);
+        document.getElementById("valNonRefund").innerText = formatINR(nonRefundDeposit);
+        document.getElementById("valNotionalInterest").innerText = formatINR(notionalInterest);
+        document.getElementById("valTotalConsideration").innerText = formatINR(totalConsideration);
+        
+        document.getElementById("stmpduty").innerText = formatINR(stampDuty) + "/-";
+        document.getElementById("regfee").innerText = formatINR(regFee) + "/-";
+        document.getElementById("dhc").innerText = formatINR(dhc) + "/-";
+        document.getElementById("legalfee").innerText = formatINR(legalCharges) + "/-";
+        document.getElementById("visitingfee").innerText = formatINR(visitingCharges) + "/-";
+        document.getElementById("valGrandTotal").innerText = formatINR(grandTotal) + "/-";
+
+        // Save previous values for future change animations
+        previousValues = {
+          rent: totalRent,
+          nonRefund: nonRefundDeposit,
+          notional: notionalInterest,
+          totalBase: totalConsideration,
+          duty: stampDuty,
+          payable: grandTotal,
+          legal: legalCharges,
+          visiting: visitingCharges
         };
 
-        questDesc.innerHTML = `<strong>Hunter ${name}</strong>, your ${rank} Quest has arrived:<br><br>${quests[rank]}`;
-        questWindow.style.display = "block";
+        // Render visual charts
+        updateAnalytics(totalRent, nonRefundDeposit, notionalInterest, totalConsideration);
       }
+
+      // Update the animated SVG Donut Chart and its Legend details
+      function updateAnalytics(rent, nonRefund, interest, total) {
+        const totalConsideration = total || 1; // Avoid divide by zero
+        
+        const rentPct = (rent / totalConsideration) * 100;
+        const nonRefundPct = (nonRefund / totalConsideration) * 100;
+        const interestPct = (interest / totalConsideration) * 100;
+
+        // Update Legend Labels
+        document.getElementById("legendRentPct").innerText = Math.round(rentPct) + "%";
+        document.getElementById("legendNonRefundPct").innerText = Math.round(nonRefundPct) + "%";
+        document.getElementById("legendInterestPct").innerText = Math.round(interestPct) + "%";
+
+        // Update center value text with compressed form (e.g. ₹3.6L or ₹45K)
+        let totalDisplay = formatINR(total);
+        if (total >= 100000) {
+          totalDisplay = "₹" + (total / 100000).toFixed(2) + "L";
+        } else if (total >= 1000) {
+          totalDisplay = "₹" + (total / 1000).toFixed(1) + "K";
+        }
+        document.getElementById("chartTotalVal").innerText = totalDisplay;
+
+        // Render dynamic SVG segments
+        // Circle circumference for r=40 is ~251.2
+        const circumference = 251.2;
+        const segRent = document.getElementById("segRent");
+        const segNonRefund = document.getElementById("segNonRefund");
+        const segInterest = document.getElementById("segInterest");
+
+        const rentLength = (rentPct / 100) * circumference;
+        const nonRefundLength = (nonRefundPct / 100) * circumference;
+        const interestLength = (interestPct / 100) * circumference;
+
+        // Segments are chain-linked using dash-offset
+        // Segment 1 (Rent): Offset 0
+        segRent.style.strokeDasharray = `${rentLength} ${circumference}`;
+        segRent.style.strokeDashoffset = "0";
+
+        // Segment 2 (Non-Refundable): Offset = -(Rent Length)
+        segNonRefund.style.strokeDasharray = `${nonRefundLength} ${circumference}`;
+        segNonRefund.style.strokeDashoffset = `-${rentLength}`;
+
+        // Segment 3 (Notional Interest): Offset = -(Rent Length + Non-Refundable Length)
+        segInterest.style.strokeDasharray = `${interestLength} ${circumference}`;
+        segInterest.style.strokeDashoffset = `-${rentLength + nonRefundLength}`;
+      }
+
+      // Decorative Pulse Trigger on Calculate Click
+      function triggerVisualPulse() {
+        const container = document.querySelector(".receipt-panel");
+        container.style.transform = "scale(0.98)";
+        setTimeout(() => {
+          container.style.transform = "none";
+        }, 150);
+      }
+
+      // Copy text bill summary to clipboard
+      function copyReceiptToClipboard() {
+        const isFixed = document.getElementById("Fixed").checked;
+        const months = document.getElementById("txtPeriod").value;
+        const area = document.querySelector('input[name="area"]:checked').value;
+        
+        let summaryText = `--------------------------------------------------\n`;
+        summaryText += `  MAHARASHTRA STAMP DUTY & REGISTRATION ESTIMATE\n`;
+        summaryText += `--------------------------------------------------\n`;
+        summaryText += `License Period: ${months} Months\n`;
+        summaryText += `Property Location Area: ${area}\n`;
+        summaryText += `Rent Schedule Type: ${isFixed ? 'Fixed Monthly' : 'Escalating Schedule'}\n\n`;
+        
+        summaryText += `TAXABLE base (CONSIDERATION) DETAILS:\n`;
+        summaryText += `- Total Rent Consideration: ${formatINR(previousValues.rent)}\n`;
+        summaryText += `- Non-Refundable Premium Deposit: ${formatINR(previousValues.nonRefund)}\n`;
+        summaryText += `- Notional Deposit Interest (10% p.a.): ${formatINR(previousValues.notional)}\n`;
+        summaryText += `* Taxable Base Total: ${formatINR(previousValues.totalBase)}\n\n`;
+        
+        summaryText += `PAYABLE FEES & CHARGES:\n`;
+        summaryText += `- Stamp Duty (0.25%): ${document.getElementById("stmpduty").innerText}\n`;
+        summaryText += `- Fixed Registration Fee: ${document.getElementById("regfee").innerText}\n`;
+        summaryText += `- Document Handling Charge: ${document.getElementById("dhc").innerText}\n`;
+        summaryText += `- Legal Charges: ${document.getElementById("legalfee").innerText}\n`;
+        summaryText += `- Visiting Charges: ${document.getElementById("visitingfee").innerText}\n`;
+        summaryText += `--------------------------------------------------\n`;
+        summaryText += `TOTAL PAYABLE ESTIMATE: ${document.getElementById("valGrandTotal").innerText}\n`;
+        summaryText += `--------------------------------------------------\n`;
+        summaryText += `Generated on ${new Date().toLocaleDateString('en-IN')} via Stamp Duty Calculator.\n`;
+
+        navigator.clipboard.writeText(summaryText).then(() => {
+          const toast = document.getElementById("clipboardToast");
+          toast.classList.add("show");
+          setTimeout(() => {
+            toast.classList.remove("show");
+          }, 3000);
+        }).catch(err => {
+          console.error("Could not copy receipt details: ", err);
+        });
+      }
+
+      // Initialize layout and perform calculations on page load
+      window.onload = function () {
+        toggleRentType();
+        
+        // Open the first FAQ item by default
+        const firstFAQ = document.querySelector(".accordion-header");
+        if (firstFAQ) toggleAccordion(firstFAQ);
+      };
     </script>
   </body>
 </html>
