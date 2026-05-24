@@ -2,12 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Gracefully prevent external browser/extension challenges from throwing errors
+      window.solvesSimpleChallenge = window.solvesSimpleChallenge || function() {};
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stamp Duty & Registration Calculator | Maharashtra</title>
     
     <!-- Meta tags for SEO -->
     <meta name="description" content="Calculate Stamp Duty, Registration Fees, and Document Handling Charges (DHC) for Leave and License / Rental agreements in Maharashtra under Section 36A of the Bombay Stamp Act, 1958." />
     <meta name="keywords" content="stamp duty calculator, leave and license, rental agreement stamp duty, maharashtra stamp duty, registration fee calculator, mumbai rent agreement tax" />
+    
+    <!-- PWA Capabilities for Offline installation -->
+    <meta name="theme-color" content="#06070a" />
+    <link rel="manifest" href='data:application/manifest+json,{
+      "name": "Addmyproperty Stamp Duty Calculator",
+      "short_name": "Addmyproperty",
+      "description": "Premium Stamp Duty & Registration Calculator for Maharashtra",
+      "start_url": "./index.html",
+      "display": "standalone",
+      "background_color": "#06070a",
+      "theme_color": "#236147",
+      "icons": [
+        {
+          "src": "data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27 fill=%27%23236147%27><rect width=%27100%27 height=%27100%27 rx=%2720%27/><path d=%27M25 75V25C25 18 30 12 38 12h24c8 0 13 6 13 13v34%27 stroke=%27%23ffffff%27 stroke-width=%278%27 fill=%27none%27 stroke-linecap=%27round%27/><path d=%27M55 45l15-12 15 12%27 stroke=%27%23ffffff%27 stroke-width=%278%27 fill=%27none%27 stroke-linecap=%27round%27/></svg>",
+          "sizes": "512x512",
+          "type": "image/svg+xml",
+          "purpose": "any maskable"
+        }
+      ]
+    }'>
     
     <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,7 +168,7 @@
       /* Two Column Dashboard Grid */
       .calculator-grid {
         display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
+        grid-template-columns: 1.15fr 0.85fr;
         gap: 30px;
         align-items: start;
         animation: fadeInUp 0.8s ease-out;
@@ -279,6 +303,14 @@
         display: none;
       }
 
+      .custom-checkbox {
+        accent-color: #236147;
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
       .segmented-control label {
         flex: 1;
         text-align: center;
@@ -410,7 +442,7 @@
       /* Right Column: Sticky Invoice & Results */
       .results-sidebar {
         position: sticky;
-        top: 40px;
+        top: 20px;
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -538,6 +570,24 @@
         border-radius: 12px;
         border: 1px solid rgba(255, 255, 255, 0.03);
         margin-bottom: 25px;
+      }
+
+      .fee-section-header {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .fee-section-header.gov {
+        color: var(--secondary);
+      }
+      .fee-section-header.service {
+        color: var(--warning);
+        margin-top: 8px;
       }
 
       .fee-item {
@@ -735,9 +785,11 @@
         border-radius: 50%;
       }
 
-      .legend-dot.rent { background-color: var(--primary); }
-      .legend-dot.nonrefund { background-color: var(--secondary); }
-      .legend-dot.interest { background-color: var(--warning); }
+      .legend-dot.stamp { background-color: var(--primary); }
+      .legend-dot.reg { background-color: var(--secondary); }
+      .legend-dot.service { background-color: var(--warning); }
+      .legend-dot.cgst { background-color: #10b981; }
+      .legend-dot.sgst { background-color: #ef4444; }
 
       .legend-val {
         font-weight: 600;
@@ -792,7 +844,7 @@
       .accordion-content {
         max-height: 0;
         overflow: hidden;
-        transition: max-height var(--transition-speed) ease-out, padding var(--transition-speed) ease-out;
+        transition: max-height var(--transition-speed) ease-out;
         padding: 0 20px;
         font-size: 0.85rem;
         color: var(--text-secondary);
@@ -815,7 +867,6 @@
       }
 
       .accordion-item.active .accordion-content {
-        padding: 15px 20px 20px 20px;
         border-color: var(--border-color);
       }
 
@@ -889,15 +940,15 @@
         .calculator-grid {
           grid-template-columns: 1fr;
         }
-
+ 
         .results-sidebar {
-          position: static;
+          position: static !important;
         }
 
         .faq-panel {
           grid-column: span 1;
         }
-
+ 
         .faq-grid {
           grid-template-columns: 1fr;
         }
@@ -923,87 +974,192 @@
         .form-group.full-width {
           grid-column: span 1;
         }
+
+        .chart-legend {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 10px 15px !important;
+        }
       }
 
-      /* Print Stylesheet Layout - White clean invoice */
+      /* Print Stylesheet Layout - Optimized White Single-Page A4 Tax Invoice */
       @media print {
+        @page {
+          size: A4 portrait;
+          margin: 12mm 12mm 12mm 12mm;
+        }
+
         body {
           background: #fff !important;
           color: #000 !important;
           padding: 0 !important;
+          margin: 0 !important;
+          font-size: 10pt !important;
         }
         
         .app-wrapper {
           max-width: 100% !important;
-          gap: 15px !important;
+          gap: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
-        .panel, .receipt-panel {
-          background: #fff !important;
-          border: 1px solid #ddd !important;
-          box-shadow: none !important;
-          color: #000 !important;
-          padding: 15px !important;
-          backdrop-filter: none !important;
-          border-radius: 0 !important;
-        }
-
-        .logo-icon,
-        .preset-container,
+        #parametersPanel,
+        .chart-panel,
+        header,
+        .toast,
+        #clipboardToast,
+        .gst-billing-toggle-container,
         .action-buttons,
         .faq-panel,
-        .chart-panel,
-        header .subtitle,
-        .segmented-control input,
-        .segmented-control label,
-        .config-card,
-        .table-container {
+        .receipt-header {
           display: none !important;
         }
 
-        /* Show the essential inputs as simple text for reference */
-        input, select {
-          border: none !important;
-          background: transparent !important;
-          color: #000 !important;
-          padding: 0 !important;
-          font-weight: bold !important;
-          pointer-events: none !important;
+        .print-only-header {
+          display: flex !important;
+          margin-bottom: 12px !important;
+        }
+
+        .print-only-header svg {
+          width: 130px !important;
+          height: 65px !important;
         }
 
         .calculator-grid {
+          display: block !important;
           grid-template-columns: 1fr !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        .receipt-panel {
+          background: #fff !important;
+          border: none !important;
+          box-shadow: none !important;
+          color: #000 !important;
+          padding: 0 !important;
+          backdrop-filter: none !important;
+          border-radius: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          margin: 0 !important;
         }
 
         .receipt-panel::before {
           display: none !important;
         }
 
-        .receipt-header .live-indicator {
-          display: none !important;
+        .receipt-parties-details {
+          background: #f8fafc !important;
+          border: 1px solid #e2e8f0 !important;
+          padding: 10px 14px !important;
+          margin-bottom: 12px !important;
+          border-radius: 6px !important;
+          color: #000 !important;
+        }
+
+        .receipt-parties-details strong {
+          color: #000 !important;
+        }
+
+        .bill-items {
+          gap: 8px !important;
+          margin-bottom: 12px !important;
+        }
+
+        .bill-item {
+          font-size: 9.5pt !important;
+        }
+
+        .bill-item-sub {
+          font-size: 8pt !important;
+          color: #4a5568 !important;
         }
 
         .bill-item-label, .fee-item-label {
-          color: #333 !important;
+          color: #2d3748 !important;
         }
 
         .bill-item-val, .fee-item-val {
           color: #000 !important;
         }
 
-        .total-payable-card {
-          background: #f3f4f6 !important;
-          border: 2px solid #000 !important;
+        .bill-item.highlighted {
+          background: #f1f5f9 !important;
+          border: 1px solid #cbd5e1 !important;
+          padding: 6px 10px !important;
+          border-radius: 6px !important;
+        }
+
+        .bill-divider {
+          border-bottom: 1px dashed #cbd5e1 !important;
+          margin: 4px 0 !important;
+        }
+
+        .fees-list {
+          background: #f8fafc !important;
+          border: 1px solid #e2e8f0 !important;
+          padding: 12px 16px !important;
+          margin-bottom: 12px !important;
+          border-radius: 6px !important;
+          gap: 8px !important;
+        }
+
+        .fee-item {
+          font-size: 9.5pt !important;
+        }
+
+        .fee-item.primary-fee .fee-item-val {
+          font-size: 10.5pt !important;
+          text-shadow: none !important;
           color: #000 !important;
+        }
+
+        .total-payable-card {
+          background: #f0fff4 !important;
+          border: 1.5pt solid #48bb78 !important;
+          padding: 12px 16px !important;
+          margin-bottom: 12px !important;
+          border-radius: 6px !important;
+          box-shadow: none !important;
         }
 
         .total-payable-label {
-          color: #000 !important;
+          color: #276749 !important;
+          font-size: 10pt !important;
         }
 
         .total-payable-val {
-          color: #000 !important;
+          color: #276749 !important;
+          font-size: 14pt !important;
           text-shadow: none !important;
+        }
+
+        #valGrandTotalWords {
+          color: #276749 !important;
+          margin-top: -8px !important;
+          margin-bottom: 12px !important;
+          font-size: 8.5pt !important;
+          font-weight: bold !important;
+          text-align: right !important;
+        }
+
+        .fee-section-header {
+          color: #000 !important;
+          font-weight: bold !important;
+          border-bottom: 1px solid #cbd5e1 !important;
+          padding-bottom: 4px !important;
+          margin-top: 10px !important;
+          margin-bottom: 8px !important;
+          font-size: 8pt !important;
+        }
+
+        .receipt-footer {
+          margin-top: 12px !important;
+          padding-top: 8px !important;
+          border-top: 1px dashed #cbd5e1 !important;
+          font-size: 8.5pt !important;
+          color: #4a5568 !important;
         }
       }
     </style>
@@ -1012,15 +1168,32 @@
     <div class="app-wrapper">
       
       <!-- Calculator Header -->
-      <header>
-        <div class="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M12 8v8"/>
-            <path d="M8 12h8"/>
+      <header style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+        <!-- Brand Logo -->
+        <div class="brand-logo-container" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; animation: fadeInDown 0.8s ease-out;">
+          <svg width="220" height="110" viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Skyscraper Left Pillar -->
+            <path d="M35 130V35C35 26.7157 41.7157 20 50 20H95C103.284 20 110 26.7157 110 35V80" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Skyscraper Inner Pillar -->
+            <path d="M58 130V90C58 84.4772 62.4772 80 68 80H110" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            
+            <!-- First Roof line -->
+            <path d="M95 85L155 35L215 85" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Second overlapping Roof line -->
+            <path d="M155 85L230 30L305 85" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            
+            <!-- Horizontal baseline under the roofs -->
+            <path d="M130 115H305" stroke="#236147" stroke-width="4" stroke-linecap="round"/>
+            
+            <!-- Text 'admyproperty' -->
+            <text x="130" y="104" font-family="'Outfit', sans-serif" font-size="28" font-weight="800" fill="#ffffff" letter-spacing="-0.5">admyproperty</text>
+            
+            <!-- Tagline pill at the bottom -->
+            <rect x="35" y="128" width="270" height="24" rx="4" fill="#236147"/>
+            <text x="170" y="144" font-family="'Inter', sans-serif" font-size="9.5" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">A BETTER WAY TO ADVERTISE YOUR PROPERTY</text>
           </svg>
         </div>
-        <h1>Stamp Duty & Registration Calculator</h1>
+        <h1 style="font-size: 1.8rem; margin-top: 10px;">Stamp Duty & Registration Calculator</h1>
         <p class="subtitle">Maharashtra Leave and License Agreements <span>(Bombay Stamp Act, 1958 Article 36A)</span></p>
       </header>
 
@@ -1028,7 +1201,7 @@
       <div class="calculator-grid">
         
         <!-- Left Side: Interactive Input Panel -->
-        <div class="panel">
+        <div class="panel" id="parametersPanel">
           <div class="panel-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1041,6 +1214,55 @@
           </div>
           
           <div class="form-section">
+            
+            <!-- Parties & Property Details -->
+            <div class="form-group full-width" style="margin-bottom: 5px;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                Parties & Property Information
+              </span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="licensorName">Licensor (Owner) Name</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <input type="text" id="licensorName" placeholder="Enter owner's name" oninput="calculateStampDuty()" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="licenseeName">Licensee (Tenant) Name</label>
+                <div class="input-wrapper">
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <input type="text" id="licenseeName" placeholder="Enter tenant's name" oninput="calculateStampDuty()" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group full-width" style="margin-top: 5px; margin-bottom: 10px;">
+              <label for="propertyAddress">Property Address</label>
+              <div class="input-wrapper">
+                <span class="input-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                </span>
+                <input type="text" id="propertyAddress" placeholder="Enter property address (City, Building, Flat No.)" oninput="calculateStampDuty()" />
+              </div>
+            </div>
+
+            <div style="height: 1px; background: var(--border-color); grid-column: span 2; margin: 5px 0 15px 0;"></div>
             
             <!-- Row 1: Duration and Location -->
             <div class="form-row">
@@ -1061,8 +1283,8 @@
                     type="number"
                     id="txtPeriod"
                     placeholder="e.g., 24"
-                    min="1"
-                    value="24"
+                    min="0"
+                    value="0"
                     oninput="handlePeriodChange()"
                   />
                 </div>
@@ -1099,6 +1321,32 @@
                 <span class="preset-container" style="color:var(--text-muted); font-size:0.75rem; padding-left:4px; margin-top:12px;">
                   Affects the fixed registration fee (Urban: ₹1000, Rural: ₹500).
                 </span>
+              </div>
+            </div>
+
+            <!-- Property Type Toggle -->
+            <div class="form-row" style="margin-top: 5px;">
+              <div class="form-group">
+                <label>Property Type</label>
+                <div class="segmented-control" style="max-width: 350px;">
+                  <input
+                    type="radio"
+                    name="propType"
+                    id="Residential"
+                    value="Residential"
+                    checked
+                    onchange="calculateStampDuty()"
+                  />
+                  <label for="Residential">Residential</label>
+                  <input
+                    type="radio"
+                    name="propType"
+                    id="Commercial"
+                    value="Commercial"
+                    onchange="calculateStampDuty()"
+                  />
+                  <label for="Commercial">Commercial</label>
+                </div>
               </div>
             </div>
             
@@ -1150,7 +1398,7 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
               </svg>
-              <span><strong>Notional Interest Rule:</strong> Refundable deposits are taxed at a 10% per annum compounding index rate ($10\%$ of deposit multiplied by total period in years) which is added directly to the total consideration.</span>
+              <span><strong>Notional Interest Rule:</strong> Refundable security deposits are subject to a notional interest rate of 10% per annum (simple interest) for the agreement duration. This calculated amount is added to the total rent and non-refundable deposits to determine the taxable consideration under Article 36A.</span>
             </div>
             
             <!-- Row 3: Rent Setup Toggle -->
@@ -1189,7 +1437,7 @@
                   id="avgMonthRate"
                   placeholder="0"
                   min="0"
-                  value="15000"
+                  value="0"
                   oninput="calculateStampDuty()"
                 />
               </div>
@@ -1217,7 +1465,7 @@
                         id="baseRent"
                         placeholder="e.g., 10000"
                         min="0"
-                        value="10000"
+                        value="0"
                         oninput="generateVaryingRentTable()"
                       />
                     </div>
@@ -1281,45 +1529,63 @@
               </div>
             </div>
 
-            <!-- Section 4: Additional Charges -->
-            <div class="form-row" style="margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 20px;">
+
+
+            <!-- Section 5: Documents Provided Checklist & Legal Execution -->
+            <div style="border-top: 1px dashed var(--border-color); padding-top: 20px; display: flex; flex-direction: column; gap: 15px;">
               <div class="form-group">
-                <label for="legalCharges">Legal Drafting Charges</label>
-                <div class="input-wrapper">
-                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
-                  <input
-                    type="number"
-                    id="legalCharges"
-                    placeholder="0"
-                    min="0"
-                    oninput="calculateStampDuty()"
-                  />
+                <label>Documents Provided Checklist</label>
+                <div id="docsChecklistGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docAadhaar" class="custom-checkbox" onchange="calculateStampDuty()" checked /> Aadhaar Card
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docPAN" class="custom-checkbox" onchange="calculateStampDuty()" checked /> PAN Card
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docElectricity" class="custom-checkbox" onchange="calculateStampDuty()" /> Electricity Bill
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docIndex2" class="custom-checkbox" onchange="calculateStampDuty()" /> Index II
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docRegisteredDeed" class="custom-checkbox" onchange="calculateStampDuty()" /> Registered Deed
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main);">
+                    <input type="checkbox" id="docTaxReceipt" class="custom-checkbox" onchange="calculateStampDuty()" /> Property Tax Receipt
+                  </label>
                 </div>
-                <div class="preset-container">
-                  <span class="preset-badge" onclick="setPresetCharge('legal', 0)">₹0</span>
-                  <span class="preset-badge" onclick="setPresetCharge('legal', 1000)">1,000</span>
-                  <span class="preset-badge" onclick="setPresetCharge('legal', 2000)">2,000</span>
-                  <span class="preset-badge" onclick="setPresetCharge('legal', 3000)">3,000</span>
+
+                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 6px;">
+                  <label for="newDocInput" style="text-transform: none; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 2px;">Add Custom Document</label>
+                  <div style="display: flex; gap: 8px;">
+                    <div class="input-wrapper" style="flex: 1;">
+                      <span class="input-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                      </span>
+                      <input type="text" id="newDocInput" placeholder="e.g. NOC, Maintenance Receipt" onkeydown="handleNewDocKeyDown(event)" />
+                    </div>
+                    <button class="btn btn-secondary" type="button" onclick="addCustomDocument()" style="padding: 0 16px; font-size: 0.8rem; height: 46px; width: auto; font-weight: 600; text-transform: none; border-color: rgba(99, 102, 241, 0.2); margin-top: 0;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; display: inline-block; vertical-align: middle;">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                      </svg>
+                      Add
+                    </button>
+                  </div>
                 </div>
               </div>
-              
-              <div class="form-group">
-                <label for="visitingCharges">Visiting & Biometric Charges</label>
+
+              <div class="form-group" style="margin-top: 5px;">
+                <label for="legalExecutive">Legal Work Handled By</label>
                 <div class="input-wrapper">
-                  <span class="input-icon" style="font-weight:600; font-size:0.85rem; color:var(--text-secondary);">₹</span>
-                  <input
-                    type="number"
-                    id="visitingCharges"
-                    placeholder="0"
-                    min="0"
-                    oninput="calculateStampDuty()"
-                  />
-                </div>
-                <div class="preset-container">
-                  <span class="preset-badge" onclick="setPresetCharge('visiting', 0)">₹0</span>
-                  <span class="preset-badge" onclick="setPresetCharge('visiting', 500)">500</span>
-                  <span class="preset-badge" onclick="setPresetCharge('visiting', 1000)">1,000</span>
-                  <span class="preset-badge" onclick="setPresetCharge('visiting', 1500)">1,500</span>
+                  <span class="input-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                    </svg>
+                  </span>
+                  <input type="text" id="legalExecutive" placeholder="Lawyer, Executive, or Firm Name" oninput="calculateStampDuty()" />
                 </div>
               </div>
             </div>
@@ -1332,12 +1598,45 @@
           
           <!-- Sticky Bill Card -->
           <div class="receipt-panel">
+            <!-- Print Only Letterhead Branding -->
+            <div class="print-only-header" style="display: none; text-align: center; flex-direction: column; align-items: center; border-bottom: 1px dashed #236147; padding-bottom: 15px; margin-bottom: 20px;">
+              <svg width="180" height="90" viewBox="0 0 320 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M35 130V35C35 26.7157 41.7157 20 50 20H95C103.284 20 110 26.7157 110 35V80" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M58 130V90C58 84.4772 62.4772 80 68 80H110" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M95 85L155 35L215 85" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M155 85L230 30L305 85" stroke="#236147" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M130 115H305" stroke="#236147" stroke-width="4" stroke-linecap="round"/>
+                <text x="130" y="104" font-family="'Outfit', sans-serif" font-size="28" font-weight="800" fill="#236147" letter-spacing="-0.5">admyproperty</text>
+                <rect x="35" y="128" width="270" height="24" rx="4" fill="#236147"/>
+                <text x="170" y="144" font-family="'Inter', sans-serif" font-size="9.5" font-weight="bold" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">A BETTER WAY TO ADVERTISE YOUR PROPERTY</text>
+              </svg>
+              <div style="font-family: 'Outfit', sans-serif; font-size: 14pt; font-weight: bold; color: #2d3748; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Agreement Cost Estimate</div>
+              <div style="font-family: 'Inter', sans-serif; font-size: 8.5pt; color: #718096; margin-top: 2px;">Maharashtra Leave & License (Bombay Stamp Act Art. 36A)</div>
+            </div>
+
             <div class="receipt-header">
               <h3>Live Agreement Receipt</h3>
               <div class="live-indicator">
                 <span class="live-indicator-dot"></span>
                 LIVE UPDATING
               </div>
+            </div>
+
+            <!-- GST Billing Toggle -->
+            <div class="gst-billing-toggle-container" style="display: flex; align-items: center; justify-content: space-between; background: rgba(99, 102, 241, 0.05); padding: 8px 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid rgba(99, 102, 241, 0.15);">
+              <label style="display: flex; align-items: center; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; color: #fff; margin-bottom: 0;">
+                <input type="checkbox" id="gstBillingCheckbox" class="custom-checkbox" onchange="calculateStampDuty()" />
+                Enable GST Billing (Tax Invoice)
+              </label>
+              <span style="font-size: 0.75rem; font-weight: 700; color: var(--secondary);">18% GST</span>
+            </div>
+
+            <!-- Party & Property Details in Receipt -->
+            <div class="receipt-parties-details" id="receiptParties" style="background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.04); display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem;">
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Property Type:</span> <strong id="valReceiptPropType" style="color: var(--secondary);">Residential</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Licensor (Owner):</span> <strong id="valReceiptLicensor" style="color: #fff;">—</strong></div>
+              <div style="display: flex; justify-content: space-between;"><span style="color: var(--text-secondary);">Licensee (Tenant):</span> <strong id="valReceiptLicensee" style="color: #fff;">—</strong></div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;"><span style="color: var(--text-secondary); margin-right: 10px;">Address:</span> <strong id="valReceiptAddress" style="color: #fff; text-align: right; word-break: break-word; max-width: 60%;">—</strong></div>
             </div>
 
             <!-- Taxable Base Items -->
@@ -1375,10 +1674,23 @@
                 </div>
                 <div class="bill-item-val" id="valTotalConsideration">₹3,60,000</div>
               </div>
+
+              <div class="bill-item" id="docsVerifiedSection" style="border-top: 1px dashed rgba(255,255,255,0.04); padding-top: 10px; margin-top: 5px;">
+                <div class="bill-item-label">
+                  Documents Provided
+                  <span class="bill-item-sub" id="valDocsList" style="word-break: break-word; max-width: 250px; display: inline-block;">None</span>
+                </div>
+              </div>
             </div>
 
             <!-- State Taxes and Fees -->
             <div class="fees-list">
+              <!-- Sub-header 1: Government Statutory Fees -->
+              <div class="fee-section-header gov">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Statutory Fees (Payable to Gov)
+              </div>
+
               <div class="fee-item primary-fee">
                 <div class="fee-item-label">
                   Stamp Duty (0.25%)
@@ -1386,8 +1698,6 @@
                 </div>
                 <div class="fee-item-val" id="stmpduty">₹900/-</div>
               </div>
-
-              <div class="bill-divider" style="opacity:0.3;"></div>
 
               <div class="fee-item">
                 <div class="fee-item-label">
@@ -1405,10 +1715,18 @@
                 <div class="fee-item-val" id="dhc">₹300/-</div>
               </div>
 
+              <div class="bill-divider" style="opacity:0.3; margin: 4px 0;"></div>
+
+              <!-- Sub-header 2: Fixed Professional Charges -->
+              <div class="fee-section-header service">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Fixed Service Charges
+              </div>
+
               <div class="fee-item">
                 <div class="fee-item-label">
                   Legal Charges
-                  <span class="bill-item-sub" style="font-weight:normal;">Drafting & professional fee</span>
+                  <span class="bill-item-sub" id="legalfee-sub" style="font-weight:normal;">Drafting & professional fee</span>
                 </div>
                 <div class="fee-item-val" id="legalfee">₹0/-</div>
               </div>
@@ -1416,9 +1734,33 @@
               <div class="fee-item">
                 <div class="fee-item-label">
                   Visiting Charges
-                  <span class="bill-item-sub" style="font-weight:normal;">On-site biometrics & support</span>
+                  <span class="bill-item-sub" id="visitingfee-sub" style="font-weight:normal;">On-site biometrics & support</span>
                 </div>
                 <div class="fee-item-val" id="visitingfee">₹0/-</div>
+              </div>
+
+              <div class="fee-item">
+                <div class="fee-item-label">
+                  Police Verification Charges
+                  <span class="bill-item-sub" style="font-weight:normal;">Fixed government processing fee</span>
+                </div>
+                <div class="fee-item-val" id="policefee">₹100/-</div>
+              </div>
+
+              <div class="fee-item" id="cgstRow" style="display: none;">
+                <div class="fee-item-label">
+                  CGST (9%)
+                  <span class="bill-item-sub" style="font-weight:normal;">Central GST on professional services</span>
+                </div>
+                <div class="fee-item-val" id="cgstfee">₹0/-</div>
+              </div>
+
+              <div class="fee-item" id="sgstRow" style="display: none;">
+                <div class="fee-item-label">
+                  SGST (9%)
+                  <span class="bill-item-sub" style="font-weight:normal;">State GST on professional services</span>
+                </div>
+                <div class="fee-item-val" id="sgstfee">₹0/-</div>
               </div>
             </div>
 
@@ -1426,6 +1768,74 @@
             <div class="total-payable-card">
               <span class="total-payable-label">Total Payable Estimate</span>
               <span class="total-payable-val" id="valGrandTotal">₹2,200/-</span>
+            </div>
+
+            <!-- Amount in Words -->
+            <div id="valGrandTotalWords" style="font-family: var(--font-header); font-size: 0.8rem; font-weight: 600; text-align: right; color: var(--text-secondary); margin-top: -20px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 0.3px;">
+              Rupees Two Thousand Two Hundred Only
+            </div>
+
+            <!-- Financial Share Analysis (FSA) -->
+            <div class="chart-panel" style="border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 25px; margin-top: 25px; margin-bottom: 25px;">
+              <span style="font-size:0.95rem; font-weight:700; color:#fff; align-self:flex-start;">Financial Share Analysis</span>
+              
+              <div class="donut-wrapper">
+                <svg class="donut-chart" viewBox="0 0 100 100">
+                  <!-- Outer Base Circle -->
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="9"/>
+                  
+                  <!-- dynamic donut segments -->
+                  <circle id="segStampDuty" cx="50" cy="50" r="40" fill="none" stroke="var(--primary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                  <circle id="segRegFee" cx="50" cy="50" r="40" fill="none" stroke="var(--secondary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                  <circle id="segService" cx="50" cy="50" r="40" fill="none" stroke="var(--warning)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                  <circle id="segCGST" cx="50" cy="50" r="40" fill="none" stroke="#10b981" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                  <circle id="segSGST" cx="50" cy="50" r="40" fill="none" stroke="#ef4444" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
+                </svg>
+                
+                <div class="donut-center">
+                  <span class="donut-title">Grand Total</span>
+                  <span class="donut-val" id="chartTotalVal">₹2,200</span>
+                </div>
+              </div>
+
+              <!-- Custom Chart Legend -->
+              <div class="chart-legend" id="chartLegend">
+                <div class="legend-item" id="legendStampRow">
+                  <span class="legend-label">
+                    <span class="legend-dot stamp"></span>
+                    Stamp Duty
+                  </span>
+                  <span class="legend-val" id="legendStampPct">0%</span>
+                </div>
+                <div class="legend-item" id="legendRegRow">
+                  <span class="legend-label">
+                    <span class="legend-dot reg"></span>
+                    Registration Fees
+                  </span>
+                  <span class="legend-val" id="legendRegPct">0%</span>
+                </div>
+                <div class="legend-item" id="legendServiceRow">
+                  <span class="legend-label">
+                    <span class="legend-dot service"></span>
+                    Professional Services
+                  </span>
+                  <span class="legend-val" id="legendServicePct">0%</span>
+                </div>
+                <div class="legend-item" id="legendCGSTRow" style="display: none;">
+                  <span class="legend-label">
+                    <span class="legend-dot cgst"></span>
+                    Central GST (CGST)
+                  </span>
+                  <span class="legend-val" id="legendCGSTPct">0%</span>
+                </div>
+                <div class="legend-item" id="legendSGSTRow" style="display: none;">
+                  <span class="legend-label">
+                    <span class="legend-dot sgst"></span>
+                    State GST (SGST)
+                  </span>
+                  <span class="legend-val" id="legendSGSTPct">0%</span>
+                </div>
+              </div>
             </div>
 
             <!-- Actions buttons inside invoice -->
@@ -1438,6 +1848,17 @@
                 </svg>
                 Print / Save Detailed PDF
               </button>
+
+              <button class="btn btn-secondary" onclick="triggerVisualPulse(); exportToWord();" style="border-color: rgba(0, 212, 255, 0.25);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                Download Word Document
+              </button>
               
               <button class="btn btn-secondary" onclick="copyReceiptToClipboard()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1446,56 +1867,14 @@
                 Copy Text Summary
               </button>
             </div>
-          </div>
 
-          <!-- Interactive SVG Analytics Chart -->
-          <div class="panel chart-panel">
-            <span style="font-size:0.95rem; font-weight:700; color:#fff; align-self:flex-start;">Financial Share Analysis</span>
-            
-            <div class="donut-wrapper">
-              <svg class="donut-chart" viewBox="0 0 100 100">
-                <!-- Outer Base Circle -->
-                <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="9"/>
-                
-                <!-- dynamic donut segments -->
-                <circle id="segRent" cx="50" cy="50" r="40" fill="none" stroke="var(--primary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
-                <circle id="segNonRefund" cx="50" cy="50" r="40" fill="none" stroke="var(--secondary)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
-                <circle id="segInterest" cx="50" cy="50" r="40" fill="none" stroke="var(--warning)" stroke-width="9" stroke-linecap="round" stroke-dasharray="0 251.2" stroke-dashoffset="0"/>
-              </svg>
-              
-              <div class="donut-center">
-                <span class="donut-title">Taxable Base</span>
-                <span class="donut-val" id="chartTotalVal">₹3.6L</span>
-              </div>
-            </div>
-
-            <!-- Custom Chart Legend -->
-            <div class="chart-legend">
-              <div class="legend-item">
-                <span class="legend-label">
-                  <span class="legend-dot rent"></span>
-                  Total Rent Paid
-                </span>
-                <span class="legend-val" id="legendRentPct">100%</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-label">
-                  <span class="legend-dot nonrefund"></span>
-                  Non-Refundable Deposit
-                </span>
-                <span class="legend-val" id="legendNonRefundPct">0%</span>
-              </div>
-              <div class="legend-item">
-                <span class="legend-label">
-                  <span class="legend-dot interest"></span>
-                  Notional Interest
-                </span>
-                <span class="legend-val" id="legendInterestPct">0%</span>
-              </div>
+            <!-- Receipt Footer / Legal Handler -->
+            <div class="receipt-footer" style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.8rem; text-align: center; color: var(--text-secondary);">
+              <span>Legal Work Done By: <strong id="valLegalExecutive" style="color: var(--secondary);">—</strong></span>
             </div>
           </div>
-          
         </div>
+      </div>
 
         <!-- FAQ and Legal Explanation Accordions -->
         <div class="panel faq-panel">
@@ -1518,7 +1897,9 @@
                   </svg>
                 </div>
                 <div class="accordion-content">
-                  Under Article 36A of the Bombay Stamp Act, 1958, Stamp Duty is calculated at a flat rate of <strong>0.25%</strong> of the "Total Consideration" (the Taxable Base). The Total Consideration includes the sum of all rent to be paid for the license period, any non-refundable deposits, and a 10% per annum notional interest on the refundable security deposit.
+                  <div class="accordion-inner" style="padding: 15px 0 20px 0;">
+                    Under Article 36A of the Bombay Stamp Act, 1958, Stamp Duty is calculated at a flat rate of <strong>0.25%</strong> of the "Total Consideration" (the Taxable Base). The Total Consideration includes the sum of all rent to be paid for the license period, any non-refundable deposits, and a 10% per annum notional interest on the refundable security deposit.
+                  </div>
                 </div>
               </div>
               
@@ -1530,7 +1911,9 @@
                   </svg>
                 </div>
                 <div class="accordion-content">
-                  The state government assumes that if a landlord receives a refundable security deposit, they will earn interest on it. Therefore, a **notional interest rate of 10% per annum** is calculated on the refundable security deposit for the duration of the license period. This calculated interest is added to the total rent and non-refundable deposits to form the "Total Consideration".
+                  <div class="accordion-inner" style="padding: 15px 0 20px 0;">
+                    The state government assumes that if a landlord receives a refundable security deposit, they will earn interest on it. Therefore, a <strong>notional interest rate of 10% per annum</strong> is calculated on the refundable security deposit for the duration of the license period. This calculated interest is added to the total rent and non-refundable deposits to form the "Total Consideration".
+                  </div>
                 </div>
               </div>
               
@@ -1546,11 +1929,13 @@
                   </svg>
                 </div>
                 <div class="accordion-content">
-                  Registration charges are fixed by the government based on where the property is located:
-                  <ul style="margin-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
-                    <li><strong>Urban Areas:</strong> Property within Municipal Corporation boundaries carries a fixed registration fee of <strong>₹1,000</strong>.</li>
-                    <li><strong>Rural Areas:</strong> Property outside Municipal Corporation boundaries carries a fixed registration fee of <strong>₹500</strong>.</li>
-                  </ul>
+                  <div class="accordion-inner" style="padding: 15px 0 20px 0;">
+                    Registration charges are fixed by the government based on where the property is located:
+                    <ul style="margin-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 4px;">
+                      <li><strong>Urban Areas:</strong> Property within Municipal Corporation boundaries carries a fixed registration fee of <strong>₹1,000</strong>.</li>
+                      <li><strong>Rural Areas:</strong> Property outside Municipal Corporation boundaries carries a fixed registration fee of <strong>₹500</strong>.</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               
@@ -1562,7 +1947,9 @@
                   </svg>
                 </div>
                 <div class="accordion-content">
-                  Yes. If the calculated stamp duty is less than ₹100, the law mandates a **minimum stamp duty of ₹100** (provided the total consideration is greater than 0). If there is no deposit, no rent, and no consideration, the stamp duty is ₹0.
+                  <div class="accordion-inner" style="padding: 15px 0 20px 0;">
+                    Yes. If the calculated stamp duty is less than ₹100, the law mandates a <strong>minimum stamp duty of ₹100</strong> (provided the total consideration is greater than 0). If there is no deposit, no rent, and no consideration, the stamp duty is ₹0.
+                  </div>
                 </div>
               </div>
               
@@ -1570,7 +1957,6 @@
           </div>
         </div>
 
-      </div>
     </div>
 
     <!-- Clipboard copy feedback toast -->
@@ -1583,6 +1969,72 @@
     </div>
 
     <script>
+      // Dynamic custom document checklist array
+      const customDocuments = [];
+
+      function handleNewDocKeyDown(event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          addCustomDocument();
+        }
+      }
+
+      function addCustomDocument() {
+        const input = document.getElementById("newDocInput");
+        const value = input.value.trim();
+        if (!value) return;
+
+        // Avoid duplicates in the custom list or standard checklist names
+        const standardDocs = ["Aadhaar Card", "PAN Card", "Electricity Bill", "Index II", "Registered Deed", "Property Tax Receipt"];
+        if (customDocuments.includes(value) || standardDocs.map(d => d.toLowerCase()).includes(value.toLowerCase())) {
+          input.value = "";
+          return;
+        }
+
+        customDocuments.push(value);
+        input.value = "";
+
+        renderCustomDocuments();
+        calculateStampDuty();
+      }
+
+      function removeCustomDocument(doc) {
+        const index = customDocuments.indexOf(doc);
+        if (index > -1) {
+          customDocuments.splice(index, 1);
+        }
+        renderCustomDocuments();
+        calculateStampDuty();
+      }
+
+      function renderCustomDocuments() {
+        const grid = document.getElementById("docsChecklistGrid");
+        if (!grid) return;
+        
+        // Clear previously added custom document elements
+        const customItems = grid.querySelectorAll(".custom-doc-item");
+        customItems.forEach(el => el.remove());
+
+        customDocuments.forEach((doc, idx) => {
+          const label = document.createElement("label");
+          label.className = "custom-doc-item";
+          label.style.cssText = "display: flex; align-items: center; justify-content: space-between; gap: 8px; text-transform: none; font-size: 0.85rem; font-weight: normal; cursor: pointer; color: var(--text-main); background: rgba(99, 102, 241, 0.05); padding: 4px 8px; border-radius: 6px; border: 1px dashed rgba(99, 102, 241, 0.2); position: relative;";
+          
+          label.innerHTML = `
+            <span style="display: flex; align-items: center; gap: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;">
+              <input type="checkbox" id="customDoc_${idx}" class="custom-checkbox" onchange="calculateStampDuty()" checked />
+              ${doc}
+            </span>
+            <span onclick="event.stopPropagation(); event.preventDefault(); removeCustomDocument('${doc.replace(/'/g, "\\'")}')" style="color: var(--text-muted); cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; transition: color 0.2s;" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--text-muted)'">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </span>
+          `;
+          grid.appendChild(label);
+        });
+      }
+
       // Active Element Highlight tracker for dynamic glow animations
       let previousValues = {
         rent: 0,
@@ -1592,7 +2044,10 @@
         duty: 0,
         payable: 0,
         legal: 0,
-        visiting: 0
+        visiting: 0,
+        police: 0,
+        cgst: 0,
+        sgst: 0
       };
 
       // Handle changes to the license period
@@ -1624,14 +2079,7 @@
         calculateStampDuty();
       }
 
-      function setPresetCharge(type, val) {
-        if (type === 'legal') {
-          document.getElementById("legalCharges").value = val || "";
-        } else {
-          document.getElementById("visitingCharges").value = val || "";
-        }
-        calculateStampDuty();
-      }
+
 
       // Accordion dropdown toggle function
       function toggleAccordion(element) {
@@ -1742,6 +2190,58 @@
         return "₹" + Math.round(number).toLocaleString('en-IN');
       }
 
+      // Convert number to words in Indian Currency System (Lakhs & Crores)
+      function numToWords(num) {
+        if (num === 0) return "Rupees Zero Only";
+        
+        const a = [
+          '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten',
+          'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
+        ];
+        const b = [
+          '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'
+        ];
+
+        function g(n) {
+          if (n < 20) return a[n];
+          const digit = n % 10;
+          return b[Math.floor(n / 10)] + (digit ? ' ' + a[digit] : '');
+        }
+
+        function c(n) {
+          if (n < 100) return g(n);
+          return a[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' and ' + g(n % 100) : '');
+        }
+
+        let str = '';
+        let temp = num;
+
+        // Crores
+        if (Math.floor(temp / 10000000) > 0) {
+          str += c(Math.floor(temp / 10000000)) + ' Crore ';
+          temp %= 10000000;
+        }
+
+        // Lakhs
+        if (Math.floor(temp / 100000) > 0) {
+          str += c(Math.floor(temp / 100000)) + ' Lakh ';
+          temp %= 100000;
+        }
+
+        // Thousands
+        if (Math.floor(temp / 1000) > 0) {
+          str += c(Math.floor(temp / 1000)) + ' Thousand ';
+          temp %= 1000;
+        }
+
+        // Hundreds & below
+        if (temp > 0) {
+          str += c(temp);
+        }
+
+        return "Rupees " + str.trim() + " Only";
+      }
+
       // Trigger a beautiful visual highlight flash on elements that change values
       function flashOnUpdate(elementId, currentValue, previousValue) {
         const el = document.getElementById(elementId);
@@ -1760,6 +2260,7 @@
         const months = parseFloat(document.getElementById("txtPeriod").value) || 0;
         const refundDeposit = parseFloat(document.getElementById("refundDeposit").value) || 0;
         const nonRefundDeposit = parseFloat(document.getElementById("nonRefundDeposit").value) || 0;
+        const propType = document.querySelector('input[name="propType"]:checked').value;
 
         let totalRent = 0;
         const rentType = document.querySelector('input[name="renttype"]:checked').value;
@@ -1808,19 +2309,79 @@
         if (stampDuty < 100 && totalConsideration > 0) stampDuty = 100;
         if (totalConsideration === 0) stampDuty = 0;
 
-        // Additional service fees
-        const legalCharges = parseFloat(document.getElementById("legalCharges").value) || 0;
-        const visitingCharges = parseFloat(document.getElementById("visitingCharges").value) || 0;
+        // Additional service fees (calculated dynamically based on property type)
+        let legalCharges = 1000;
+        let visitingCharges = 499;
+        if (propType === "Commercial") {
+          legalCharges = 1500;
+          visitingCharges = 499;
+        }
+
+        // Update receipt subtext with charges details
+        if (propType === "Residential") {
+          document.getElementById("legalfee-sub").innerText = "Drafting & professional fee (Legal is ₹1,000)";
+          document.getElementById("visitingfee-sub").innerText = "On-site biometrics & support (Visiting is ₹499)";
+        } else {
+          document.getElementById("legalfee-sub").innerText = "Drafting & professional fee (Legal is ₹1,500)";
+          document.getElementById("visitingfee-sub").innerText = "On-site biometrics & support (Visiting is ₹499)";
+        }
 
         // Fees
         const area = document.querySelector('input[name="area"]:checked').value;
         const regFee = area === "Urban" ? 1000 : 500;
         const dhc = 300;
-        const grandTotal = stampDuty + regFee + dhc + legalCharges + visitingCharges;
+        const policeCharges = 100;
+
+        // GST calculations (exempt on gov statutory dues & DHC, 18% on professional service charges)
+        const gstChecked = document.getElementById("gstBillingCheckbox").checked;
+        let cgst = 0;
+        let sgst = 0;
+        if (gstChecked) {
+          const serviceSubtotal = legalCharges + visitingCharges;
+          cgst = Math.round(serviceSubtotal * 0.09);
+          sgst = Math.round(serviceSubtotal * 0.09);
+          document.getElementById("cgstRow").style.display = "flex";
+          document.getElementById("sgstRow").style.display = "flex";
+        } else {
+          document.getElementById("cgstRow").style.display = "none";
+          document.getElementById("sgstRow").style.display = "none";
+        }
+
+        const grandTotal = stampDuty + regFee + dhc + legalCharges + visitingCharges + policeCharges + cgst + sgst;
 
         // Update Labels
         document.getElementById("interestCalculationLabel").innerText = `10% interest p.a. for ${months} months`;
         document.getElementById("regFeeLocationLabel").innerText = `Fixed rate for ${area} area`;
+
+        // Retrieve and update parties and address information
+        const licensorName = document.getElementById("licensorName").value.trim();
+        const licenseeName = document.getElementById("licenseeName").value.trim();
+        const propertyAddress = document.getElementById("propertyAddress").value.trim();
+        const legalExecutive = document.getElementById("legalExecutive").value.trim();
+
+        document.getElementById("valReceiptPropType").innerText = propType;
+        document.getElementById("valReceiptLicensor").innerText = licensorName || "—";
+        document.getElementById("valReceiptLicensee").innerText = licenseeName || "—";
+        document.getElementById("valReceiptAddress").innerText = propertyAddress || "—";
+        document.getElementById("valLegalExecutive").innerText = legalExecutive || "—";
+
+        // Collect and update Checklist of documents provided
+        const docsList = [];
+        if (document.getElementById("docAadhaar").checked) docsList.push("Aadhaar Card");
+        if (document.getElementById("docPAN").checked) docsList.push("PAN Card");
+        if (document.getElementById("docElectricity").checked) docsList.push("Electricity Bill");
+        if (document.getElementById("docIndex2").checked) docsList.push("Index II");
+        if (document.getElementById("docRegisteredDeed").checked) docsList.push("Registered Deed");
+        if (document.getElementById("docTaxReceipt").checked) docsList.push("Property Tax Receipt");
+
+        customDocuments.forEach((doc, idx) => {
+          const chk = document.getElementById(`customDoc_${idx}`);
+          if (chk && chk.checked) {
+            docsList.push(doc);
+          }
+        });
+
+        document.getElementById("valDocsList").innerText = docsList.length > 0 ? docsList.join(", ") : "None";
 
         // Apply animated flashes on value updates
         flashOnUpdate("valTotalRent", totalRent, previousValues.rent);
@@ -1830,6 +2391,9 @@
         flashOnUpdate("stmpduty", stampDuty, previousValues.duty);
         flashOnUpdate("legalfee", legalCharges, previousValues.legal);
         flashOnUpdate("visitingfee", visitingCharges, previousValues.visiting);
+        flashOnUpdate("policefee", policeCharges, previousValues.police);
+        flashOnUpdate("cgstfee", cgst, previousValues.cgst);
+        flashOnUpdate("sgstfee", sgst, previousValues.sgst);
         flashOnUpdate("valGrandTotal", grandTotal, previousValues.payable);
 
         // Update Values in DOM
@@ -1843,7 +2407,11 @@
         document.getElementById("dhc").innerText = formatINR(dhc) + "/-";
         document.getElementById("legalfee").innerText = formatINR(legalCharges) + "/-";
         document.getElementById("visitingfee").innerText = formatINR(visitingCharges) + "/-";
+        document.getElementById("policefee").innerText = formatINR(policeCharges) + "/-";
+        document.getElementById("cgstfee").innerText = formatINR(cgst) + "/-";
+        document.getElementById("sgstfee").innerText = formatINR(sgst) + "/-";
         document.getElementById("valGrandTotal").innerText = formatINR(grandTotal) + "/-";
+        document.getElementById("valGrandTotalWords").innerText = numToWords(grandTotal);
 
         // Save previous values for future change animations
         previousValues = {
@@ -1854,58 +2422,112 @@
           duty: stampDuty,
           payable: grandTotal,
           legal: legalCharges,
-          visiting: visitingCharges
+          visiting: visitingCharges,
+          police: policeCharges,
+          cgst: cgst,
+          sgst: sgst
         };
 
-        // Render visual charts
-        updateAnalytics(totalRent, nonRefundDeposit, notionalInterest, totalConsideration);
+        // Render visual charts (Grand Total Breakdown)
+        const professionalServicesTotal = legalCharges + visitingCharges + policeCharges;
+        updateAnalytics(stampDuty, regFee + dhc, professionalServicesTotal, cgst, sgst, grandTotal);
       }
 
-      // Update the animated SVG Donut Chart and its Legend details
-      function updateAnalytics(rent, nonRefund, interest, total) {
-        const totalConsideration = total || 1; // Avoid divide by zero
+      // Update the animated SVG Donut Chart and its Legend details for Grand Total Breakdown
+      function updateAnalytics(stampDuty, regFee, serviceCharges, cgst, sgst, grandTotal) {
+        const totalVal = grandTotal || 1; // Avoid divide by zero
         
-        const rentPct = (rent / totalConsideration) * 100;
-        const nonRefundPct = (nonRefund / totalConsideration) * 100;
-        const interestPct = (interest / totalConsideration) * 100;
+        const stampPct = (stampDuty / totalVal) * 100;
+        const regPct = (regFee / totalVal) * 100;
+        const servicePct = (serviceCharges / totalVal) * 100;
+        const cgstPct = (cgst / totalVal) * 100;
+        const sgstPct = (sgst / totalVal) * 100;
 
         // Update Legend Labels
-        document.getElementById("legendRentPct").innerText = Math.round(rentPct) + "%";
-        document.getElementById("legendNonRefundPct").innerText = Math.round(nonRefundPct) + "%";
-        document.getElementById("legendInterestPct").innerText = Math.round(interestPct) + "%";
+        document.getElementById("legendStampPct").innerText = Math.round(stampPct) + "%";
+        document.getElementById("legendRegPct").innerText = Math.round(regPct) + "%";
+        document.getElementById("legendServicePct").innerText = Math.round(servicePct) + "%";
+        
+        const gstChecked = document.getElementById("gstBillingCheckbox").checked;
+        if (gstChecked) {
+          document.getElementById("legendCGSTRow").style.display = "flex";
+          document.getElementById("legendSGSTRow").style.display = "flex";
+          document.getElementById("legendCGSTPct").innerText = Math.round(cgstPct) + "%";
+          document.getElementById("legendSGSTPct").innerText = Math.round(sgstPct) + "%";
+        } else {
+          document.getElementById("legendCGSTRow").style.display = "none";
+          document.getElementById("legendSGSTRow").style.display = "none";
+        }
 
         // Update center value text with compressed form (e.g. ₹3.6L or ₹45K)
-        let totalDisplay = formatINR(total);
-        if (total >= 100000) {
-          totalDisplay = "₹" + (total / 100000).toFixed(2) + "L";
-        } else if (total >= 1000) {
-          totalDisplay = "₹" + (total / 1000).toFixed(1) + "K";
+        let totalDisplay = formatINR(grandTotal);
+        if (grandTotal >= 100000) {
+          totalDisplay = "₹" + (grandTotal / 100000).toFixed(2) + "L";
+        } else if (grandTotal >= 1000) {
+          totalDisplay = "₹" + (grandTotal / 1000).toFixed(1) + "K";
         }
         document.getElementById("chartTotalVal").innerText = totalDisplay;
 
         // Render dynamic SVG segments
         // Circle circumference for r=40 is ~251.2
         const circumference = 251.2;
-        const segRent = document.getElementById("segRent");
-        const segNonRefund = document.getElementById("segNonRefund");
-        const segInterest = document.getElementById("segInterest");
+        const segStamp = document.getElementById("segStampDuty");
+        const segReg = document.getElementById("segRegFee");
+        const segService = document.getElementById("segService");
+        const segCGST = document.getElementById("segCGST");
+        const segSGST = document.getElementById("segSGST");
 
-        const rentLength = (rentPct / 100) * circumference;
-        const nonRefundLength = (nonRefundPct / 100) * circumference;
-        const interestLength = (interestPct / 100) * circumference;
+        const stampLen = (stampPct / 100) * circumference;
+        const regLen = (regPct / 100) * circumference;
+        const serviceLen = (servicePct / 100) * circumference;
+        const cgstLen = (cgstPct / 100) * circumference;
+        const sgstLen = (sgstPct / 100) * circumference;
 
-        // Segments are chain-linked using dash-offset
-        // Segment 1 (Rent): Offset 0
-        segRent.style.strokeDasharray = `${rentLength} ${circumference}`;
-        segRent.style.strokeDashoffset = "0";
+        // Chain-link offsets
+        // Segment 1 (Stamp Duty)
+        if (stampLen === 0) {
+          segStamp.style.display = "none";
+        } else {
+          segStamp.style.display = "block";
+          segStamp.style.strokeDasharray = `${stampLen} ${circumference}`;
+          segStamp.style.strokeDashoffset = "0";
+        }
 
-        // Segment 2 (Non-Refundable): Offset = -(Rent Length)
-        segNonRefund.style.strokeDasharray = `${nonRefundLength} ${circumference}`;
-        segNonRefund.style.strokeDashoffset = `-${rentLength}`;
+        // Segment 2 (Registration Fees)
+        if (regLen === 0) {
+          segReg.style.display = "none";
+        } else {
+          segReg.style.display = "block";
+          segReg.style.strokeDasharray = `${regLen} ${circumference}`;
+          segReg.style.strokeDashoffset = `-${stampLen}`;
+        }
 
-        // Segment 3 (Notional Interest): Offset = -(Rent Length + Non-Refundable Length)
-        segInterest.style.strokeDasharray = `${interestLength} ${circumference}`;
-        segInterest.style.strokeDashoffset = `-${rentLength + nonRefundLength}`;
+        // Segment 3 (Professional Services)
+        if (serviceLen === 0) {
+          segService.style.display = "none";
+        } else {
+          segService.style.display = "block";
+          segService.style.strokeDasharray = `${serviceLen} ${circumference}`;
+          segService.style.strokeDashoffset = `-${stampLen + regLen}`;
+        }
+
+        // Segment 4 (CGST)
+        if (cgstLen === 0 || !gstChecked) {
+          segCGST.style.display = "none";
+        } else {
+          segCGST.style.display = "block";
+          segCGST.style.strokeDasharray = `${cgstLen} ${circumference}`;
+          segCGST.style.strokeDashoffset = `-${stampLen + regLen + serviceLen}`;
+        }
+
+        // Segment 5 (SGST)
+        if (sgstLen === 0 || !gstChecked) {
+          segSGST.style.display = "none";
+        } else {
+          segSGST.style.display = "block";
+          segSGST.style.strokeDasharray = `${sgstLen} ${circumference}`;
+          segSGST.style.strokeDashoffset = `-${stampLen + regLen + serviceLen + cgstLen}`;
+        }
       }
 
       // Decorative Pulse Trigger on Calculate Click
@@ -1923,27 +2545,55 @@
         const months = document.getElementById("txtPeriod").value;
         const area = document.querySelector('input[name="area"]:checked').value;
         
+        const propType = document.querySelector('input[name="propType"]:checked').value;
+        const licensor = document.getElementById("licensorName").value.trim() || "N/A";
+        const licensee = document.getElementById("licenseeName").value.trim() || "N/A";
+        const address = document.getElementById("propertyAddress").value.trim() || "N/A";
+        const legalBy = document.getElementById("legalExecutive").value.trim() || "N/A";
+        const docs = document.getElementById("valDocsList").innerText;
+
         let summaryText = `--------------------------------------------------\n`;
-        summaryText += `  MAHARASHTRA STAMP DUTY & REGISTRATION ESTIMATE\n`;
+        summaryText += `             ADDMYPROPERTY ESTIMATE               \n`;
+        summaryText += `  A Better Way to Advertise Your Property\n`;
         summaryText += `--------------------------------------------------\n`;
+        summaryText += `Property Type: ${propType}\n`;
+        summaryText += `Licensor (Owner): ${licensor}\n`;
+        summaryText += `Licensee (Tenant): ${licensee}\n`;
+        summaryText += `Property Address: ${address}\n`;
         summaryText += `License Period: ${months} Months\n`;
         summaryText += `Property Location Area: ${area}\n`;
         summaryText += `Rent Schedule Type: ${isFixed ? 'Fixed Monthly' : 'Escalating Schedule'}\n\n`;
         
-        summaryText += `TAXABLE base (CONSIDERATION) DETAILS:\n`;
+        summaryText += `TAXABLE BASE (CONSIDERATION) DETAILS:\n`;
         summaryText += `- Total Rent Consideration: ${formatINR(previousValues.rent)}\n`;
         summaryText += `- Non-Refundable Premium Deposit: ${formatINR(previousValues.nonRefund)}\n`;
         summaryText += `- Notional Deposit Interest (10% p.a.): ${formatINR(previousValues.notional)}\n`;
         summaryText += `* Taxable Base Total: ${formatINR(previousValues.totalBase)}\n\n`;
         
-        summaryText += `PAYABLE FEES & CHARGES:\n`;
+        summaryText += `GOVERNMENT STATUTORY FEES (PAYABLE TO GOV):\n`;
         summaryText += `- Stamp Duty (0.25%): ${document.getElementById("stmpduty").innerText}\n`;
         summaryText += `- Fixed Registration Fee: ${document.getElementById("regfee").innerText}\n`;
-        summaryText += `- Document Handling Charge: ${document.getElementById("dhc").innerText}\n`;
+        summaryText += `- Document Handling Charge: ${document.getElementById("dhc").innerText}\n\n`;
+        
+        summaryText += `FIXED SERVICE CHARGES:\n`;
         summaryText += `- Legal Charges: ${document.getElementById("legalfee").innerText}\n`;
         summaryText += `- Visiting Charges: ${document.getElementById("visitingfee").innerText}\n`;
+        summaryText += `- Police Verification Charges: ${document.getElementById("policefee").innerText}\n`;
+        
+        const gstChecked = document.getElementById("gstBillingCheckbox").checked;
+        if (gstChecked) {
+          summaryText += `- CGST (9%): ${document.getElementById("cgstfee").innerText}\n`;
+          summaryText += `- SGST (9%): ${document.getElementById("sgstfee").innerText}\n`;
+        }
+        summaryText += `\n`;
+
+        summaryText += `DOCUMENTS PROVIDED:\n`;
+        summaryText += `- ${docs}\n\n`;
+
+        summaryText += `LEGAL WORK HANDLED BY:\n`;
+        summaryText += `- ${legalBy}\n`;
         summaryText += `--------------------------------------------------\n`;
-        summaryText += `TOTAL PAYABLE ESTIMATE: ${document.getElementById("valGrandTotal").innerText}\n`;
+        summaryText += `TOTAL PAYABLE ESTIMATE: ${document.getElementById("valGrandTotal").innerText} (${numToWords(previousValues.payable)})\n`;
         summaryText += `--------------------------------------------------\n`;
         summaryText += `Generated on ${new Date().toLocaleDateString('en-IN')} via Stamp Duty Calculator.\n`;
 
@@ -1958,6 +2608,272 @@
         });
       }
 
+      // Generate a highly styled Microsoft Word Document (.doc) in UTF-8
+      function exportToWord() {
+        const isFixed = document.getElementById("Fixed").checked;
+        const months = document.getElementById("txtPeriod").value || "0";
+        const area = document.querySelector('input[name="area"]:checked').value;
+        const propType = document.querySelector('input[name="propType"]:checked').value;
+        const licensor = document.getElementById("licensorName").value.trim() || "N/A";
+        const licensee = document.getElementById("licenseeName").value.trim() || "N/A";
+        const address = document.getElementById("propertyAddress").value.trim() || "N/A";
+        const legalBy = document.getElementById("legalExecutive").value.trim() || "N/A";
+        const docs = document.getElementById("valDocsList").innerText;
+
+        const grandTotalWords = numToWords(previousValues.payable);
+
+        const rentCalculated = document.getElementById("valTotalRent").innerText;
+        const nonRefundable = document.getElementById("valNonRefund").innerText;
+        const interestCalculated = document.getElementById("valNotionalInterest").innerText;
+        const taxableBase = document.getElementById("valTotalConsideration").innerText;
+
+        const stampDutyVal = document.getElementById("stmpduty").innerText;
+        const regFeeVal = document.getElementById("regfee").innerText;
+        const dhcVal = document.getElementById("dhc").innerText;
+        const legalChargesVal = document.getElementById("legalfee").innerText;
+        const visitingChargesVal = document.getElementById("visitingfee").innerText;
+        const policeChargesVal = document.getElementById("policefee").innerText;
+        const grandTotalVal = document.getElementById("valGrandTotal").innerText;
+
+        const legalSubtext = document.getElementById("legalfee-sub").innerText;
+        const visitingSubtext = document.getElementById("visitingfee-sub").innerText;
+
+        const gstChecked = document.getElementById("gstBillingCheckbox").checked;
+        let gstRowsHtml = "";
+        if (gstChecked) {
+          const cgstVal = document.getElementById("cgstfee").innerText;
+          const sgstVal = document.getElementById("sgstfee").innerText;
+          gstRowsHtml = `
+      <tr>
+        <td><b>Central GST (CGST 9%)</b></td>
+        <td class="subtext">9% Central tax on service charges subtotal</td>
+        <td class="amount">${cgstVal}</td>
+      </tr>
+      <tr>
+        <td><b>State GST (SGST 9%)</b></td>
+        <td class="subtext">9% State tax on service charges subtotal</td>
+        <td class="amount">${sgstVal}</td>
+      </tr>
+          `;
+        }
+
+        const currentDate = new Date().toLocaleDateString('en-IN');
+
+        const htmlContent = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>Stamp Duty & Registration Estimate - admyproperty</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.6; color: #2d3748; padding: 20px; }
+    .header-table { width: 100%; border: none; margin-bottom: 30px; }
+    .logo-title { font-size: 26pt; font-weight: bold; color: #236147; font-family: 'Outfit', sans-serif; }
+    .logo-subtitle { font-size: 10pt; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; }
+    .doc-title { font-size: 18pt; font-weight: bold; color: #2d3748; margin-top: 15px; margin-bottom: 5px; font-family: 'Outfit', sans-serif; }
+    .doc-subtitle { font-size: 10pt; color: #718096; margin-bottom: 25px; }
+    
+    .section-title { font-size: 13pt; font-weight: bold; color: #236147; border-bottom: 1.5pt solid #e2e8f0; padding-bottom: 4px; margin-top: 25px; margin-bottom: 12px; text-transform: uppercase; font-family: 'Outfit', sans-serif; }
+    
+    .data-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .data-table td { padding: 8px 10px; border: 0.5pt solid #e2e8f0; vertical-align: top; }
+    .data-table td.label { font-weight: bold; color: #4a5568; width: 35%; background-color: #f7fafc; }
+    .data-table td.value { color: #2d3748; width: 65%; }
+
+    .fee-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; }
+    .fee-table th { background-color: #236147; color: #ffffff; padding: 10px; font-weight: bold; text-align: left; font-size: 10pt; border: 0.5pt solid #236147; }
+    .fee-table td { padding: 10px; border: 0.5pt solid #e2e8f0; vertical-align: middle; }
+    .fee-table td.subtext { font-size: 8.5pt; color: #718096; }
+    .fee-table td.amount { text-align: right; font-weight: bold; font-size: 11pt; color: #2d3748; }
+    .fee-table tr.highlighted td { background-color: #f0fff4; font-weight: bold; }
+    
+    .total-payable-card { background-color: #f0fff4; border: 1.5pt solid #48bb78; padding: 15px; border-radius: 6px; text-align: center; margin-top: 20px; margin-bottom: 25px; }
+    .total-payable-label { font-size: 11pt; font-weight: bold; color: #2f855a; text-transform: uppercase; letter-spacing: 0.5px; }
+    .total-payable-val { font-size: 20pt; font-weight: bold; color: #276749; margin-top: 5px; }
+    
+    .footer { font-size: 8.5pt; color: #a0aec0; text-align: center; margin-top: 50px; border-top: 0.5pt solid #e2e8f0; padding-top: 10px; }
+  </style>
+</head>
+<body>
+  <table class="header-table">
+    <tr>
+      <td>
+        <div class="logo-title">admyproperty</div>
+        <div class="logo-subtitle">A BETTER WAY TO ADVERTISE YOUR PROPERTY</div>
+        <div class="doc-title">Agreement Cost Estimate</div>
+        <div class="doc-subtitle">Maharashtra Leave & License (Bombay Stamp Act Art. 36A)</div>
+      </td>
+      <td style="text-align: right; vertical-align: top; font-size: 9pt; color: #718096;">
+        Date Generated: ${currentDate}
+      </td>
+    </tr>
+  </table>
+
+  <div class="section-title">1. Agreement Parameters</div>
+  <table class="data-table">
+    <tr>
+      <td class="label">Property Type</td>
+      <td class="value">${propType}</td>
+    </tr>
+    <tr>
+      <td class="label">Licensor (Owner)</td>
+      <td class="value">${licensor}</td>
+    </tr>
+    <tr>
+      <td class="label">Licensee (Tenant)</td>
+      <td class="value">${licensee}</td>
+    </tr>
+    <tr>
+      <td class="label">Property Address</td>
+      <td class="value">${address}</td>
+    </tr>
+    <tr>
+      <td class="label">License Period</td>
+      <td class="value">${months} Months</td>
+    </tr>
+    <tr>
+      <td class="label">Property Location</td>
+      <td class="value">${area} Area</td>
+    </tr>
+  </table>
+
+  <div class="section-title">2. Taxable Base (Consideration)</div>
+  <table class="fee-table">
+    <thead>
+      <tr>
+        <th style="width: 50%;">Item</th>
+        <th style="width: 25%;">Calculation Details</th>
+        <th style="width: 25%; text-align: right;">Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Total Rent Consideration</b></td>
+        <td class="subtext">${isFixed ? "Fixed Monthly Rate" : "Escalation Schedule"}</td>
+        <td class="amount">${rentCalculated}</td>
+      </tr>
+      <tr>
+        <td><b>Non-Refundable Deposit</b></td>
+        <td class="subtext">One-time premium payment</td>
+        <td class="amount">${nonRefundable}</td>
+      </tr>
+      <tr>
+        <td><b>Notional Interest on Refundable Deposit</b></td>
+        <td class="subtext">10% per annum simple interest</td>
+        <td class="amount">${interestCalculated}</td>
+      </tr>
+      <tr class="highlighted">
+        <td><b>Taxable Base Total (Consideration)</b></td>
+        <td class="subtext">Sum of taxable values</td>
+        <td class="amount">${taxableBase}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">3. Government Statutory Fees (Payable to Gov)</div>
+  <table class="fee-table">
+    <thead>
+      <tr>
+        <th style="width: 45%;">Fee Type</th>
+        <th style="width: 35%;">Compliance & Government Notes</th>
+        <th style="width: 20%; text-align: right;">Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Stamp Duty</b></td>
+        <td class="subtext">0.25% of Taxable Base (Min ₹100) under Article 36A</td>
+        <td class="amount">${stampDutyVal}</td>
+      </tr>
+      <tr>
+        <td><b>Registration Fees</b></td>
+        <td class="subtext">Fixed rate for ${area} area</td>
+        <td class="amount">${regFeeVal}</td>
+      </tr>
+      <tr>
+        <td><b>Document Handling Charges (DHC)</b></td>
+        <td class="subtext">Standard scanning, printing & physical processing</td>
+        <td class="amount">${dhcVal}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">4. Fixed Service Charges</div>
+  <table class="fee-table">
+    <thead>
+      <tr>
+        <th style="width: 45%;">Charge Type</th>
+        <th style="width: 35%;">Professional Breakdowns & Support</th>
+        <th style="width: 20%; text-align: right;">Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>Legal Charges</b></td>
+        <td class="subtext">${legalSubtext}</td>
+        <td class="amount">${legalChargesVal}</td>
+      </tr>
+      <tr>
+        <td><b>Visiting & Biometrics Charges</b></td>
+        <td class="subtext">${visitingSubtext}</td>
+        <td class="amount">${visitingChargesVal}</td>
+      </tr>
+      <tr>
+        <td><b>Police Verification Charges</b></td>
+        <td class="subtext">Fixed government processing fee</td>
+        <td class="amount">${policeChargesVal}</td>
+      </tr>
+      ${gstRowsHtml}
+    </tbody>
+  </table>
+
+  <div class="total-payable-card">
+    <div class="total-payable-label">Total Payable Estimate</div>
+    <div class="total-payable-val">${grandTotalVal}</div>
+    <div style="font-size: 10pt; color: #276749; margin-top: 5px; font-weight: bold; text-transform: uppercase;">${grandTotalWords}</div>
+  </div>
+
+  <div class="section-title">5. Compliance & Verification</div>
+  <table class="data-table">
+    <tr>
+      <td class="label">Documents Provided</td>
+      <td class="value">${docs}</td>
+    </tr>
+    <tr>
+      <td class="label">Legal Work Handled By</td>
+      <td class="value">${legalBy}</td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    Generated via admyproperty.com Stamp Duty & Registration Fee Calculator.<br>
+    This estimate is subject to government rules and verification of original documents.
+  </div>
+</body>
+</html>
+        `;
+
+        const blob = new Blob(['\ufeff' + htmlContent], {
+          type: 'application/msword'
+        });
+
+        // Create download link and trigger click
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        
+        // Clean filename using owner/tenant names if available
+        let fileName = "Stamp_Duty_Estimate.doc";
+        if (licensor !== "—" && licensor !== "N/A" && licensor !== "") {
+          fileName = "Stamp_Duty_Estimate_" + licensor.replace(/\s+/g, '_') + ".doc";
+        }
+        
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
       // Initialize layout and perform calculations on page load
       window.onload = function () {
         toggleRentType();
@@ -1965,6 +2881,13 @@
         // Open the first FAQ item by default
         const firstFAQ = document.querySelector(".accordion-header");
         if (firstFAQ) toggleAccordion(firstFAQ);
+
+        // Register Service Worker for offline PWA installation
+        if ('serviceWorker' in navigator && window.location.protocol !== 'file:') {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('Offline service worker registered.'))
+            .catch(err => console.error('Service worker registration failed:', err));
+        }
       };
     </script>
   </body>
