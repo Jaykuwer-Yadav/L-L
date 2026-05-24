@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System - Awakening Test</title>
+    <style>
+      body { background-color: #0d1117; color: #c9d1d9; font-family: 'Courier New', Courier, monospace; display: flex; justify-content: center; padding: 50px; }
+      
+      .system-window { 
+        border: 2px solid #58a6ff; 
+        background: #161b22; 
+        padding: 25px; 
+        width: 400px;
+        box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
+      }
+
+      h2 { color: #58a6ff; text-align: center; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+      
+      .stat-input { margin-bottom: 15px; }
+      label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #8b949e; }
+      
+      input { 
+        width: 100%; padding: 10px; background: #0d1117; border: 1px solid #30363d; color: #58a6ff; font-weight: bold; box-sizing: border-box;
+      }
+
+      button { 
+        width: 100%; padding: 12px; background: #238636; color: white; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase;
+      }
+
+      #rank-result { 
+        margin-top: 20px; padding: 15px; border: 1px dashed #58a6ff; text-align: center; display: none; 
+      }
+
+      .rank-text { font-size: 2rem; font-weight: bold; margin: 10px 0; display: block; }
+      .S-Rank { color: #f1e05a; text-shadow: 0 0 10px #f1e05a; }
+      .B-Rank { color: #a371f7; }
+      .E-Rank { color: #8b949e; }
+    </style>
+  </head>
+  <body>
+
+    <div class="system-window">
+      <h2>[ STATUS EVALUATION ]</h2>
+      
+      <div class="stat-input">
+        <label>PUSH-UPS (Max Reps)</label>
+        <input type="number" id="pushups" placeholder="0">
+      </div>
+
+      <div class="stat-input">
+        <label>SQUATS (Max Reps)</label>
+        <input type="number" id="squats" placeholder="0">
+      </div>
+
+      <div class="stat-input">
+        <label>RUNNING (KM in 30 mins)</label>
+        <input type="number" id="running" placeholder="0">
+      </div>
+
+      <button onclick="evaluateHunter()">Evaluate Rank</button>
+
+      <div id="rank-result">
+        <span>YOUR EVALUATED RANK:</span>
+        <span id="rank-display" class="rank-text"></span>
+        <p id="next-goal" style="font-size: 0.8rem;"></p>
+      </div>
+    </div>
+
+    <script>
+      function evaluateHunter() {
+        const p = parseInt(document.getElementById('pushups').value) || 0;
+        const s = parseInt(document.getElementById('squats').value) || 0;
+        const r = parseInt(document.getElementById('running').value) || 0;
+        
+        const rankDisplay = document.getElementById('rank-display');
+        const nextGoal = document.getElementById('next-goal');
+        const resultDiv = document.getElementById('rank-result');
+
+        let rank = "";
+        let colorClass = "";
+        let message = "";
+
+        // Rank Logic
+        if (p >= 50 && s >= 50 && r >= 5) {
+          rank = "S-RANK";
+          colorClass = "S-Rank";
+          message = "You have transcended humanity. Keep the streak to maintain your Shadow Monarch status.";
+        } else if (p >= 20 && s >= 20 && r >= 2) {
+          rank = "B-RANK";
+          colorClass = "B-Rank";
+          message = "High-tier Hunter. Focus on endurance to reach the S-Rank ceiling.";
+        } else {
+          rank = "E-RANK";
+          colorClass = "E-Rank";
+          message = "The world's weakest hunter. Complete your Daily Quest or face the penalty.";
+        }
+
+        rankDisplay.innerText = rank;
+        rankDisplay.className = `rank-text ${colorClass}`;
+        nextGoal.innerText = message;
+        resultDiv.style.display = "block";
+      }
+    </script>
+  </body>
+</html>
